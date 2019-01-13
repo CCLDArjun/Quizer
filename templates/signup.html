@@ -1,0 +1,31 @@
+{% extends "header.html" %}
+{% block body %}
+<div class="container">
+    <div class="row">
+      <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <div class="card card-signin my-5">
+          <div class="card-body">
+            <h5 class="card-title text-center">Sign Up</h5>
+              {% from "_formhelpers.html" import render_field %}
+              <form method="post" action="/signup/">
+                  <dl>
+                      {{ render_field(form.username) }}
+                      {{ render_field(form.password) }}
+                      {{ vars.password }}
+                      {{ vars.username }}
+                  </dl>
+                  <p>
+                    <input type="submit" value="Signup">
+                  </p>
+              </form>
+              {% if error %}
+                <p class="error"> <strong>{{error}}</strong></p>
+              {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> 
+
+
+{% endblock %}
