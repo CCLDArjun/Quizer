@@ -1,10 +1,6 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 from passlib.hash import sha256_crypt
-#from MySQLdb import escape_string as thwart
-#import MySQLdb
 from wtforms import Form, TextField, PasswordField, validators
-#from dbconnect import connection
-import gc
 import os
 
 app = Flask(__name__)
