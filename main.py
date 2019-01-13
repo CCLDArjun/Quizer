@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, url_for, redirect, session
 from passlib.hash import sha256_crypt
-from MySQLdb import escape_string as thwart
-import MySQLdb
+#from MySQLdb import escape_string as thwart
+#import MySQLdb
 from wtforms import Form, TextField, PasswordField, validators
 #from dbconnect import connection
 import gc
@@ -27,7 +27,6 @@ def about():
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
-	c, conn = connection()
 	if request.method == "POST":
 		attempted_username = request.form['username']
 		attempted_password = request.form['password']			
@@ -43,18 +42,10 @@ def signup():
 	if request.method == "POST" and form.validate():
 		username = form.username.data
 		password = sha256_crypt.hash(str(form.password.data))
+		print(username, password)
 
 
 	return render_template("signup.html", form=form, vars=[username, password])
-
-def connection():
-	conn = MySQLdb.connect(host="localhost",
-						   user="root",
-						   passwd="mypassword",
-						   db="ctf")
-	c = conn.cursor()
-	return c, conn
-
 
 if __name__ == "__main__":
 	app.run(debug=True)
