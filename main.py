@@ -10,7 +10,7 @@ app = Flask(__name__)
 
 
 class SignupForm(Form):
-	username = TextField('Username', [validators.DataRequired(), validators.Length(min=4, max=20)])
+	username = TextField("Username", [validators.DataRequired(), validators.Length(min=4, max=20)])
 	password = PasswordField("Password", [validators.DataRequired()])
 
 @app.route("/")
@@ -32,20 +32,17 @@ def login():
 		attempted_password = request.form['password']			
 		if attempted_username == "admin" and attempted_password == "password":
 			return redirect(url_for("home"))
-	return render_template("login.html")
+	return render_template("LogOrSignIn.html", type="Log In")
 
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():
-	form = SignupForm(request.form)
 	username = "something"
 	password = "something"
-	if request.method == "POST" and form.validate():
-		username = form.username.data
-		password = sha256_crypt.hash(str(form.password.data))
+	if request.method == "POST":
+		username = request.form['username']
+		password = sha256_crypt.hash(str(request.form['password']))
 		print(username, password)
-		return render_template("signup.html", form=form, vars=[username, password])
-
-	return render_template("signup.html", form=form, vars=[username, password])
+	return render_template("LogOrSignIn.html", type="Sign Up")
 
 if __name__ == "__main__":
 	app.run(debug=True)

@@ -5,7 +5,7 @@
       <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <div class="card card-signin my-5">
           <div class="card-body">
-            <h5 class="card-title text-center">Sign In</h5>
+            <h5 class="card-title text-center">{{ type }}</h5>
             <form class="form-signin" action="" method="post">
               <div class="form-label-group">
                 <input type="text" id="inputUsername" class="form-control" placeholder="Username" name="username" value="{{request.form.username}}" required autofocus>
@@ -15,12 +15,7 @@
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" value="{{request.form.password}}" required>
               </div>
               <br>
-              <div class="custom-control custom-checkbox mb-3">
-                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                <label class="custom-control-label" for="customCheck1">Remember password</label>
-              </div>
-              <br>
-              <button class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
+              <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">{{ type }}</button>
             </form>
           </div>
         </div>
