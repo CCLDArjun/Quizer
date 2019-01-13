@@ -32,7 +32,7 @@ def login():
 		attempted_password = request.form['password']			
 		if attempted_username == "admin" and attempted_password == "password":
 			return redirect(url_for("home"))
-	return render_template("LogOrSignIn.html", type="Log In")
+	return render_template("SigninOrSignup.html", type="Log In")
 
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():
@@ -42,7 +42,7 @@ def signup():
 		username = request.form['username']
 		password = sha256_crypt.hash(str(request.form['password']))
 		print(username, password)
-	return render_template("LogOrSignIn.html", type="Sign Up")
+	return render_template("SigninOrSignup.html", type="Sign Up")
 
 if __name__ == "__main__":
-	app.run(debug=False)
+	app.run(threaded=True)
