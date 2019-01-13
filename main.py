@@ -45,4 +45,4 @@ def signup():
 	return render_template("LogOrSignIn.html", type="Sign Up")
 
 if __name__ == "__main__":
-	app.run(debug=True)
+	app.run(debug=False)
