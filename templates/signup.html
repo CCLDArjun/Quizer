@@ -11,8 +11,8 @@
                   <dl>
                       {{ render_field(form.username) }}
                       {{ render_field(form.password) }}
-                      {{ vars.password }}
-                      {{ vars.username }}
+                      {{ vars[0] }}
+                      {{ vars[1] }}
                   </dl>
                   <p>
                     <input type="submit" value="Signup">
@@ -26,6 +26,6 @@
       </div>
     </div>
   </div> 
-
+<h1></h1>
 
 {% endblock %}

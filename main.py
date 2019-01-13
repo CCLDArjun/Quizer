@@ -37,13 +37,13 @@ def login():
 @app.route("/signup/", methods=["GET", "POST"])
 def signup():
 	form = SignupForm(request.form)
-	username = ""
-	password = ""
+	username = "something"
+	password = "something"
 	if request.method == "POST" and form.validate():
 		username = form.username.data
 		password = sha256_crypt.hash(str(form.password.data))
 		print(username, password)
-
+		return render_template("signup.html", form=form, vars=[username, password])
 
 	return render_template("signup.html", form=form, vars=[username, password])
 
