@@ -1,7 +1,8 @@
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, url_for, redirect, session, flash
 from passlib.hash import sha256_crypt
 from wtforms import Form, TextField, PasswordField, validators
 from flask_sqlalchemy import SQLAlchemy
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
@@ -33,11 +34,14 @@ def about():
 @app.route("/login/", methods=["GET", "POST"])
 def login():
 	if request.method == "POST":
-		attempted_username = request.form['username']
-		attempted_password = request.form['password']			
-		if attempted_username == "admin" and attempted_password == "password":
-			session['username'] = 'admin'
-			return redirect(url_for("home"))
+		user = User.query.filter_by(username=request.form['username']).first()			
+		if user:
+			hashed_password = user.password
+			attempted_password = str(request.form['password'])
+			if check_password_hash(hashed_password, attempted_password):
+				return redirect(url_for("home"))
+			return "<h1> incorrect password </h1>"
+		return "<h1>user does not exist</h1>"
 	return render_template("SigninOrSignup.html", type="Log In", session=session)
 
 @app.route("/signup/", methods=["GET", "POST"])
@@ -46,7 +50,7 @@ def signup():
 	password = "something"
 	if request.method == "POST":
 		username = str(request.form['username'])
-		password = sha256_crypt.hash(str(request.form['password']))
+		password = generate_password_hash(str(request.form['password']), method='sha256')
 		x = User.query.filter_by(username=username).first()
 		if x:
 			return "<h1>user already exists</h1>"
@@ -54,6 +58,7 @@ def signup():
 			new_user = User(username=username, password=password)
 			db.session.add(new_user)
 			db.session.commit()
+			session['username'] = new_user.username
 			return '<h1>New user has been created!</h1>'
 	return render_template("SigninOrSignup.html", type="Sign Up", session=session)
 
