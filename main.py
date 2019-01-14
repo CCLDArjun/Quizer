@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////Users/arjunbemarkar/Python/Flask/CTF-Client/databases/users.db"#"sqlite:///{}".format(path)
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////Users/arjunbemarkar/Python/Flask/CTF-Client/databases/users.db"
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
 
@@ -45,8 +45,16 @@ def signup():
 	username = "something"
 	password = "something"
 	if request.method == "POST":
-		username = request.form['username']
+		username = str(request.form['username'])
 		password = sha256_crypt.hash(str(request.form['password']))
+		x = User.query.filter_by(username=username).first()
+		if x:
+			return "<h1>user already exists</h1>"
+		else:
+			new_user = User(username=username, password=password)
+			db.session.add(new_user)
+			db.session.commit()
+			return '<h1>New user has been created!</h1>'
 	return render_template("SigninOrSignup.html", type="Sign Up", session=session)
 
 @app.route("/logout/")
