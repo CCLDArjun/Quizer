@@ -20,6 +20,15 @@ class User(db.Model):
 	def __repr__(self):
 		return '<User {}, {}>'.format(self.username, self.password)
 
+class Challenge():
+	name = ""
+	points = 0
+	def __init__(self, name, points):
+		self.name = name
+		self.points = points
+
+challenges = [Challenge("Test", 8), Challenge("Wow", 6), Challenge("Lol", 5)]
+
 @app.route("/")
 def home():
 	return render_template("index.html", session=session)
@@ -78,9 +87,13 @@ def test():
 		return "<h1>you dont have access to this page, {}</h1>".format(session)
 		print session
 
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html')
+@app.route("/challenges/")
+def challenges_page():
+	return render_template("challenges.html", challenges=challenges)
+
+# @app.errorhandler(404)
+# def page_not_found(e):
+#     return render_template('404.html')
 
 if __name__ == "__main__":
 	app.run(threaded=True)
