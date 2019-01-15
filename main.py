@@ -95,6 +95,13 @@ def challenges_page():
 def page_not_found(e):
     return render_template('404.html')
 
+
+@app.route('/challenges', defaults={'path': ''})
+@app.route('/challenges/<path:path>')
+def catch_all(path):
+    return 'You want path: %s' % path
+
+
 if __name__ == "__main__":
 	app.run(threaded=True)
 
