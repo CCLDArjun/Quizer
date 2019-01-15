@@ -40,8 +40,9 @@ def login():
 			attempted_password = str(request.form['password'])
 			if check_password_hash(hashed_password, attempted_password):
 				return redirect(url_for("home"))
-			return "<h1> incorrect password </h1>"
-		return "<h1>user does not exist</h1>"
+			flash(u"Incorrect Password", 'danger')
+			return render_template("SigninOrSignup.html", type="Log In", session=session)
+		flash(u"User Does Not Exist", 'danger')
 	return render_template("SigninOrSignup.html", type="Log In", session=session)
 
 @app.route("/signup/", methods=["GET", "POST"])
@@ -53,13 +54,13 @@ def signup():
 		password = generate_password_hash(str(request.form['password']), method='sha256')
 		x = User.query.filter_by(username=username).first()
 		if x:
-			return "<h1>user already exists</h1>"
+			flash(u"This username has already been taken", 'danger')
 		else:
 			new_user = User(username=username, password=password)
 			db.session.add(new_user)
 			db.session.commit()
 			session['username'] = new_user.username
-			return '<h1>New user has been created!</h1>'
+			flash(u"new user has been created!", 'success')
 	return render_template("SigninOrSignup.html", type="Sign Up", session=session)
 
 @app.route("/logout/")

@@ -51,7 +51,19 @@
         </div>
       </div>
     </nav>
-    <body>
-      {% block body %}{% endblock %}
+    <body>  
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }} alert-dismissible"> 
+              <strong>{{ message }}</strong>
+            </div>
+          {% endfor %}
+        {% endif %}
+      {% endwith %}
+      {% block body %}
+      {% endblock %}
     </body>
+    <script src="static/js/jquery-3.2.1.min.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
 </html>
