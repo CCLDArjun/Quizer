@@ -89,7 +89,7 @@ def test():
 
 @app.route("/challenges/")
 def challenges_page():
-	return render_template("challenges.html", challenges)
+	return render_template("challenges.html", challenges=challenges)
 
 @app.errorhandler(404)
 def page_not_found(e):
