@@ -89,11 +89,11 @@ def test():
 
 @app.route("/challenges/")
 def challenges_page():
-	return render_template("challenges.html", challenges=challenges)
+	return render_template("challenges.html", challenges)
 
-# @app.errorhandler(404)
-# def page_not_found(e):
-#     return render_template('404.html')
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
 
 if __name__ == "__main__":
 	app.run(threaded=True)
