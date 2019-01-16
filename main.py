@@ -23,11 +23,15 @@ class User(db.Model):
 class Challenge():
 	name = ""
 	points = 0
+	content = ""
+	answer = ""
 	def __init__(self, name, points):
 		self.name = name
 		self.points = points
 
 challenges = [Challenge("Test", 8), Challenge("Wow", 6), Challenge("Lol", 5)]
+for x in challenges:
+	x.content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
 
 @app.route("/")
 def home():
@@ -99,7 +103,10 @@ def page_not_found(e):
 @app.route('/challenges', defaults={'path': ''})
 @app.route('/challenges/<path:path>')
 def catch_all(path):
-    return 'You want path: %s' % path
+	for challenge in challenges:
+		if challenge.name == path:
+			return render_template("answer_challenge.html", challenge=challenge)
+	return render_template('404.html')
 
 
 if __name__ == "__main__":
