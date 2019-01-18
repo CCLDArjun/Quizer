@@ -55,7 +55,7 @@ def login():
 			if check_password_hash(hashed_password, attempted_password):
 				session['username'] = user.username
 				return redirect(url_for("home"))
-			flash(u"Incorrect Password", at.red)
+			flash(u"Incorrect Password", at.red.value)
 			return render_template("SigninOrSignup.html", type="Log In", session=session)
 		flash(u"User Does Not Exist", at.red.value)
 	return render_template("SigninOrSignup.html", type="Log In", session=session)
@@ -93,7 +93,12 @@ def test():
 
 @app.route("/challenges/")
 def challenges_page():
-	return render_template("challenges.html", challenges=challenges)
+	# return render_template("challenges.html", challenges=challenges)
+	if 'username' in session:
+		return render_template("challenges.html", challenges=challenges)
+	else:
+		flash('You have to sign up before attempting any questions', at.red.value)
+		return redirect(url_for('signup'))
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -103,10 +108,13 @@ def page_not_found(e):
 @app.route('/challenges', defaults={'path': ''})
 @app.route('/challenges/<path:path>')
 def catch_all(path):
-	for challenge in challenges:
-		if challenge.name == path:
-			return render_template("answer_challenge.html", challenge=challenge)
-	return render_template('404.html')
+	if 'username' in session:
+		for challenge in challenges:
+			if challenge.name == path:
+				return render_template("answer_challenge.html", challenge=challenge)
+	else:
+		flash('You have to sign up before attempting any questions', at.red.value)
+		return redirect(url_for('signup'))
 
 
 if __name__ == "__main__":
