@@ -7,10 +7,17 @@
           <div class="card-body">
             <h5 class="card-title text-center">{{ type }}</h5>
             <form class="form-signin" action="" method="post">
-              <div class="form-label-group">
-                <input type="text" id="inputUsername" class="form-control" placeholder="Username" name="username" value="{{request.form.username}}" required autofocus>
-              </div>
-              <br>
+              
+                <div class="form-label-group">
+                  <input type="text" id="inputUsername" class="form-control" placeholder="Username" name="username" value="{{request.form.username}}" required autofocus>
+                </div>
+                <br>
+              {% if type == 'Sign Up' %}
+                <div class="form-label-group">
+                  <input type="email" id="inputEmail" class="form-control" placeholder="Email" name="email" value="{{request.form.email}}" required>
+                </div>
+                <br>
+              {% endif %}
               <div class="form-label-group">
                 <input type="password" id="inputPassword" class="form-control" placeholder="Password" name="password" value="{{request.form.password}}" required>
               </div>

@@ -16,9 +16,10 @@ class User(db.Model):
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(20), unique=True, nullable=False)
 	password = db.Column(db.String(80), unique=True, nullable=False)
+	email = db.Column(db.String(80), unique=True, nullable=False)
 
 	def __repr__(self):
-		return '<User {}, {}>'.format(self.username, self.password)
+		return '<User {}, {}, {}>'.format(self.username, self.password, self.email)
 
 class Challenge():
 	name = ""
@@ -64,18 +65,23 @@ def login():
 def signup():
 	username = "something"
 	password = "something"
+	email = "something"
 	if request.method == "POST":
 		username = str(request.form['username'])
+		email = str(request.form['email'])
 		password = generate_password_hash(str(request.form['password']), method='sha256')
 		x = User.query.filter_by(username=username).first()
+		y = User.query.filter_by(email=email).first()
 		if x:
-			flash(u"This username has already been taken", at.red.value)
+			flash("This username has already been taken", at.red.value)
+		elif y:
+			flash("User with email has already been created", at.red.value)
 		else:
-			new_user = User(username=username, password=password)
+			new_user = User(username=username, password=password, email=email)
 			db.session.add(new_user)
 			db.session.commit()
 			session['username'] = new_user.username
-			flash(u"new user has been created!", at.green.value)
+			flash("New user has been created!", at.green.value)
 	return render_template("SigninOrSignup.html", type="Sign Up", session=session)
 
 @app.route("/logout/")
@@ -118,7 +124,7 @@ def catch_all(path):
 
 
 if __name__ == "__main__":
-	app.run(threaded=True)
+	app.run(threaded=True, debug=True)
 
 
 
