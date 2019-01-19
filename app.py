@@ -11,13 +11,17 @@ app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format("{}{}".format(os.p
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
 print(at.red.value)
+solved = db.Table('solved',
+	db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
+	db.Column('channel_id', db.ForeignKey('challenges.id'))
+	)
 class User(db.Model):
 	__tablename__ = "users"
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(20), unique=True, nullable=False)
 	password = db.Column(db.String(80), unique=True, nullable=False)
 	email = db.Column(db.String(80), unique=True, nullable=False)
-
+	solved_challenges = db.relationship('Challenge', secondary=solved, backref=db.backref('solved_users', lazy='dynamic'))
 	def __repr__(self):
 		return '<User {}, {}, {}>'.format(self.username, self.password, self.email)
 
@@ -30,7 +34,9 @@ class Challenge(db.Model):
 	answer = db.Column(db.String(225), unique=True, nullable=False)
 
 	def __repr__(self):
-		return '<User {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
+		return '<Challenge {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
+
+
 
 
 print(Challenge.query.all())
