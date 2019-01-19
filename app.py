@@ -115,11 +115,18 @@ def page_not_found(e):
 
 
 @app.route('/challenges', defaults={'path': ''})
-@app.route('/challenges/<path:path>')
+@app.route('/challenges/<path:path>', methods=["GET", "POST"])
 def catch_all(path):
 	challenge = Challenge.query.filter_by(name=path).first()
 	if 'username' in session:
-		return render_template("answer_challenge.html", challenge=challenge)
+		if request.method == "POST":
+			attempted_answer = str(request.form['answer'])
+			if challenge.answer == attempted_answer:
+				flash('Correct!', at.green.value)
+				return render_template("answer_challenge.html", challenge=challenge, solved=True)
+			else:
+				flash('Incorrect', at.yellow.value)
+		return render_template("answer_challenge.html", challenge=challenge, solved=False)
 	else:
 		flash('You have to sign up before attempting any questions', at.red.value)
 		return redirect(url_for('signup'))
