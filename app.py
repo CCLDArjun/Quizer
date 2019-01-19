@@ -33,9 +33,7 @@ class Challenge(db.Model):
 	def __repr__(self):
 		return '<User {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
 
-# challenges = [Challenge("Test", 8), Challenge("Wow", 6), Challenge("Lol", 5)]
-# for x in challenges:
-	# x.content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+
 print(Challenge.query.all())
 @app.route("/")
 def home():
@@ -102,7 +100,6 @@ def test():
 
 @app.route("/challenges/")
 def challenges_page():
-	# return render_template("challenges.html", challenges=challenges)
 	if 'username' in session:
 		return render_template("challenges.html", challenges=Challenge.query.all())
 	else:
@@ -134,21 +131,3 @@ def catch_all(path):
 
 if __name__ == "__main__":
 	app.run(threaded=True, debug=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
