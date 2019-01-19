@@ -7,7 +7,8 @@ from alert import AlertType as at
 import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format("{}{}".format(os.popen("pwd").read()[:-1], "/databases/users.db"))
+# app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format("{}{}".format(os.popen("pwd").read()[:-1], "/databases/users.db"))
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////Users/arjunbemarkar/Python/Flask/CTF-Client/databases/users.db"
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
 print(at.red.value)
@@ -21,19 +22,21 @@ class User(db.Model):
 	def __repr__(self):
 		return '<User {}, {}, {}>'.format(self.username, self.password, self.email)
 
-class Challenge():
-	name = ""
-	points = 0
-	content = ""
-	answer = ""
-	def __init__(self, name, points):
-		self.name = name
-		self.points = points
+class Challenge(db.Model):
+	__tablename__ = "challenges"
+	id = db.Column(db.Integer, primary_key=True)
+	name = db.Column(db.String(20), unique=True, nullable=False)
+	points = db.Column(db.Integer, unique=True, nullable=False)
+	content = db.Column(db.String(225), unique=True, nullable=False)
+	answer = db.Column(db.String(225), unique=True, nullable=False)
 
-challenges = [Challenge("Test", 8), Challenge("Wow", 6), Challenge("Lol", 5)]
-for x in challenges:
-	x.content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+	def __repr__(self):
+		return '<User {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
 
+# challenges = [Challenge("Test", 8), Challenge("Wow", 6), Challenge("Lol", 5)]
+# for x in challenges:
+	# x.content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+print(Challenge.query.all())
 @app.route("/")
 def home():
 	return render_template("index.html", session=session)
@@ -101,7 +104,7 @@ def test():
 def challenges_page():
 	# return render_template("challenges.html", challenges=challenges)
 	if 'username' in session:
-		return render_template("challenges.html", challenges=challenges)
+		return render_template("challenges.html", challenges=Challenge.query.all())
 	else:
 		flash('You have to sign up before attempting any questions', at.red.value)
 		return redirect(url_for('signup'))
@@ -114,10 +117,9 @@ def page_not_found(e):
 @app.route('/challenges', defaults={'path': ''})
 @app.route('/challenges/<path:path>')
 def catch_all(path):
+	challenge = Challenge.query.filter_by(name=path).first()
 	if 'username' in session:
-		for challenge in challenges:
-			if challenge.name == path:
-				return render_template("answer_challenge.html", challenge=challenge)
+		return render_template("answer_challenge.html", challenge=challenge)
 	else:
 		flash('You have to sign up before attempting any questions', at.red.value)
 		return redirect(url_for('signup'))
