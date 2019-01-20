@@ -138,8 +138,8 @@ def catch_all(path):
 				flash('Incorrect', at.yellow.value)
 		return render_template("answer_challenge.html", challenge=challenge, solved=False)
 	else:
-		flash('You have to sign up before attempting any questions', at.red.value)
-		return redirect(url_for('signup'))
+		flash('You have to log in before attempting any questions', at.red.value)
+		return redirect(url_for('login'))
 
 
 
