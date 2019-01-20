@@ -21,9 +21,10 @@ class User(db.Model):
 	username = db.Column(db.String(20), unique=True, nullable=False)
 	password = db.Column(db.String(80), unique=True, nullable=False)
 	email = db.Column(db.String(80), unique=True, nullable=False)
+	points = db.Column(db.Integer, unique=True, nullable=False)
 	solved_challenges = db.relationship('Challenge', secondary=solved, backref=db.backref('solved_users', lazy='dynamic'))
 	def __repr__(self):
-		return '<User {}, {}, {}>'.format(self.username, self.password, self.email)
+		return '<User {}, {}, {}, {}>'.format(self.username, self.password, self.email, self.points)
 
 class Challenge(db.Model):
 	__tablename__ = "challenges"
@@ -83,7 +84,7 @@ def signup():
 		elif y:
 			flash("User with email has already been created", at.red.value)
 		else:
-			new_user = User(username=username, password=password, email=email)
+			new_user = User(username=username, password=password, email=email, points=0)
 			db.session.add(new_user)
 			db.session.commit()
 			session['username'] = new_user.username
@@ -118,13 +119,22 @@ def page_not_found(e):
 
 @app.route('/challenges', defaults={'path': ''})
 @app.route('/challenges/<path:path>', methods=["GET", "POST"])
+# Challenge.query.all()[1].solved_users.append(User.query.all()[0])
 def catch_all(path):
 	challenge = Challenge.query.filter_by(name=path).first()
 	if 'username' in session:
+		for x in challenge.solved_users:
+			if x.username == session['username']:
+				return render_template("answer_challenge.html", challenge=challenge, solved=True)
 		if request.method == "POST":
 			attempted_answer = str(request.form['answer'])
 			if challenge.answer == attempted_answer:
 				flash('Correct!', at.green.value)
+				user=User.query.filter_by(username=session['username'])[0]
+				print user
+				user.points += challenge.points
+				challenge.solved_users.append(user)#User.query.filter_by(username=session['username'])[0])
+				db.session.commit()
 				return render_template("answer_challenge.html", challenge=challenge, solved=True)
 			else:
 				flash('Incorrect', at.yellow.value)
@@ -132,6 +142,7 @@ def catch_all(path):
 	else:
 		flash('You have to sign up before attempting any questions', at.red.value)
 		return redirect(url_for('signup'))
+
 
 
 if __name__ == "__main__":
