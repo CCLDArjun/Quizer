@@ -107,7 +107,13 @@ def test():
 @app.route("/challenges/")
 def challenges_page():
 	if 'username' in session:
-		return render_template("challenges.html", challenges=Challenge.query.all(), points=User.query.filter_by(username=session['username']).first().points)
+		solvedChallenges = []
+		for challenge in Challenge.query.all():
+			for user in challenge.solved_users:
+				if user.username == session['username']:
+					solvedChallenges.append(challenge)
+					continue
+		return render_template("challenges.html", challenges=Challenge.query.all(), points=User.query.filter_by(username=session['username']).first().points, solved_challenges=solvedChallenges)
 	else:
 		flash('You have to sign up before attempting any questions', at.red.value)
 		return redirect(url_for('signup'))
