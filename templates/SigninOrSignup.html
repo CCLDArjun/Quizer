@@ -1,13 +1,14 @@
 {% extends "header.html" %}
 {% block body %}
+<div class="mt-5"></div>
 <div class="container">
   <div class="row">
     <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
-      <div class="card card-signin my-5">
+      <div class="card card-signin mt-1">
         <div class="card-body">
           <h5 class="card-title text-center">{{ type }}</h5>
           <form class="form-signin" action="" method="post">
-            
+
             <div class="form-label-group">
               <input type="text" id="inputUsername" class="form-control" placeholder="Username" name="username" value="{{request.form.username}}" required autofocus>
             </div>
@@ -29,4 +30,9 @@
     </div>
   </div>
 </div>
+{% if type == "Log In" %}
+  <center>
+    <h9>Don't have an Account yet? click <a href="../signup/"> here </a> to sign up</h9>
+  </center>
+{% endif %}
 {% endblock %}
