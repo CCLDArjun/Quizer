@@ -10,7 +10,6 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format("{}{}".format(os.popen("pwd").read()[:-1], "/databases/users.db"))
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
-print(at.red.value)
 solved = db.Table('solved',
 	db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
 	db.Column('channel_id', db.ForeignKey('challenges.id'))
@@ -37,10 +36,6 @@ class Challenge(db.Model):
 	def __repr__(self):
 		return '<Challenge {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
 
-
-
-
-print(Challenge.query.all())
 @app.route("/")
 def home():
 	return render_template("index.html", session=session)
@@ -102,7 +97,6 @@ def test():
 		return "Yey"
 	else:
 		return "<h1>you dont have access to this page, {}</h1>".format(session)
-		print session
 
 @app.route("/challenges/")
 def challenges_page():
@@ -136,7 +130,6 @@ def catch_all(path):
 			if challenge.answer == attempted_answer:
 				flash('Correct!', at.green.value)
 				user=User.query.filter_by(username=session['username'])[0]
-				print user
 				user.points += challenge.points
 				challenge.solved_users.append(user)
 				db.session.commit()
