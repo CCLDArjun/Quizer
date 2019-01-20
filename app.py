@@ -116,6 +116,32 @@ def challenges_page():
 def page_not_found(e):
     return render_template('404.html')
 
+@app.route('/scoreboard/')
+def scoreboard():
+	users = []
+	string = ""
+	for user in User.query.all():
+		print(user)
+		users.append(user)
+	return render_template("scoreboard.html", users=sort(users), length=len(users))
+
+def sort(array_p):
+	array = array_p
+	less = []
+	equal = []
+	greater = []
+	if len(array) > 1:
+	    pivot = array[0].points
+	    for x in array:
+	        if x.points > pivot:
+	            less.append(x)
+	        elif x.points == pivot:
+	            equal.append(x)
+	        elif x.points < pivot:
+	            greater.append(x)
+	    return sort(less)+equal+sort(greater) 
+	else:  
+	    return array
 
 @app.route('/challenges', defaults={'path': ''})
 @app.route('/challenges/<path:path>', methods=["GET", "POST"])
