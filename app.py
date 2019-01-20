@@ -107,7 +107,7 @@ def test():
 @app.route("/challenges/")
 def challenges_page():
 	if 'username' in session:
-		return render_template("challenges.html", challenges=Challenge.query.all())
+		return render_template("challenges.html", challenges=Challenge.query.all(), points=User.query.filter_by(username=session['username']).first().points)
 	else:
 		flash('You have to sign up before attempting any questions', at.red.value)
 		return redirect(url_for('signup'))
@@ -119,7 +119,6 @@ def page_not_found(e):
 
 @app.route('/challenges', defaults={'path': ''})
 @app.route('/challenges/<path:path>', methods=["GET", "POST"])
-# Challenge.query.all()[1].solved_users.append(User.query.all()[0])
 def catch_all(path):
 	challenge = Challenge.query.filter_by(name=path).first()
 	if 'username' in session:
@@ -133,7 +132,7 @@ def catch_all(path):
 				user=User.query.filter_by(username=session['username'])[0]
 				print user
 				user.points += challenge.points
-				challenge.solved_users.append(user)#User.query.filter_by(username=session['username'])[0])
+				challenge.solved_users.append(user)
 				db.session.commit()
 				return render_template("answer_challenge.html", challenge=challenge, solved=True)
 			else:
