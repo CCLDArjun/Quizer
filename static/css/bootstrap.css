@@ -3013,6 +3013,10 @@ input[type="button"].btn-block {
   display: none;
 }
 
+.collapse.in {        
+      display: block;       
+}
+
 .collapsing {
   position: relative;
   height: 0;
