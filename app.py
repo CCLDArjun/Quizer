@@ -147,9 +147,8 @@ def sort(array_p):
 def catch_all(path):
 	challenge = Challenge.query.filter_by(name=path).first()
 	if 'username' in session:
-		for x in challenge.solved_users:
-			if x.username == session['username']:
-				return render_template("answer_challenge.html", challenge=challenge, solved=True)
+		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
+			return render_template("answer_challenge.html", challenge=challenge, solved=True)
 		if request.method == "POST":
 			attempted_answer = str(request.form['answer'])
 			if challenge.answer == attempted_answer:
