@@ -1,0 +1,52 @@
+{% extends "header.html"%}
+{% block body %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<h1 class="mt-5" align="center"><strong>Scoreboard</strong></h1>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12 text-center">
+      <div class="container">
+        <div class="list-group">
+          <a class="list-group-item">
+            <div id="header">
+              <h5 style="float: left; width: 10%; text-align: left; color:black;">Rank</h5>
+              <h5 style="float: left; width: 10%; text-align: left; color:black;">Username</h5>
+              <h5 style="float: left; width: 80%; text-align: right; color:black;">Points</h5>
+            </div>
+          </a>
+          {% for user in users %} 
+          <a class="list-group-item">
+            {% if users.index(user) == 0 %}
+            <div id="header">
+              <h4 style="float: left; width: 10%; text-align: left; color:gold;"><strong> {{ users.index(user)+1 }}</strong> </h4>
+              <h4 style="float: left; width: 10%; text-align: left; color:gold;"><strong> {{ user.username }}</strong> </h4>
+              <h4 style="float: left; width: 80%; text-align: right; color:gold;"> <strong>{{ user.points }}</strong> </h4>
+            </div>
+            {% elif users.index(user) == 1 %}
+            <div id="header">
+              <h4 style="float: left; width: 10%; text-align: left; color:silver;"><strong> {{ users.index(user)+1 }}</strong> </h4>
+              <h4 style="float: left; width: 10%; text-align: left; color:silver;"><strong> {{ user.username }}</strong> </h4>
+              <h4 style="float: left; width: 80%; text-align: right; color:silver;"><strong> {{ user.points }}</strong> </h4>
+            </div>
+            {% elif users.index(user) == 2 %}
+            <div id="header">
+              <h4 style="float: left; width: 10%; text-align: left; color:#FF7F00;"><strong> {{ users.index(user)+1 }}</strong> </h4>
+              <h4 style="float: left; width: 10%; text-align: left; color:#FF7F00;"><strong> {{ user.username }}</strong> </h4>
+              <h4 style="float: left; width: 80%; text-align: right; color:#FF7F00;"><strong> {{ user.points }}</strong> </h4>
+            </div>
+            {% else %}
+            <div id="header">
+              <h5 style="float: left; width: 10%; text-align: left; color:black;"> {{ users.index(user)+1 }} </h5>
+              <h5 style="float: left; width: 10%; text-align: left; color:black;"> {{ user.username }} </h5>
+              <h5 style="float: left; width: 80%; text-align: right; color:black;"> {{ user.points }} </h5>
+            </div>
+            {% endif %}
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
