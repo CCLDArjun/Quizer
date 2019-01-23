@@ -121,7 +121,6 @@ def scoreboard():
 	users = []
 	string = ""
 	for user in User.query.all():
-		print(user)
 		users.append(user)
 	return render_template("scoreboard.html", users=sort(users), length=len(users))
 
