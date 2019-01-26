@@ -4,16 +4,23 @@ from wtforms import Form, TextField, PasswordField, validators
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from alert import AlertType as at
-import os
+import pygal
+import datetime
+import os 
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format("{}{}".format(os.popen("pwd").read()[:-1], "/databases/users.db"))
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
-solved = db.Table('solved',
-	db.Column('user_id', db.Integer, db.ForeignKey('users.id')),
-	db.Column('channel_id', db.ForeignKey('challenges.id'))
-	)
+
+class Solved(db.Model):
+	__tablename__ = "solved"
+	id = db.Column(db.Integer, primary_key=True)
+	user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+	channel_id = db.Column(db.ForeignKey('challenges.id'))
+	timestamp = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+
+
 class User(db.Model):
 	__tablename__ = "users"
 	id = db.Column(db.Integer, primary_key=True)
@@ -21,7 +28,9 @@ class User(db.Model):
 	password = db.Column(db.String(80), unique=True, nullable=False)
 	email = db.Column(db.String(80), unique=True, nullable=False)
 	points = db.Column(db.Integer, unique=True, nullable=False)
-	solved_challenges = db.relationship('Challenge', secondary=solved, backref=db.backref('solved_users', lazy='dynamic'))
+	date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+	solved_challenges = db.relationship('Challenge', secondary="solved", backref=db.backref('solved_users', lazy='dynamic'))
+
 	def __repr__(self):
 		return '<User {}, {}, {}, {}>'.format(self.username, self.password, self.email, self.points)
 
@@ -47,6 +56,19 @@ def contact():
 @app.route("/about/")
 def about():
 	return render_template("about.html", session=session)
+
+def get_graph_data():
+	graph = pygal.DateTimeLine(x_label_rotation=35, truncate_label=-1)
+	for x in range(1, len(User.query.all())+1):
+		if Solved.query.filter_by(user_id=x).first() is None:
+			continue
+		data = [(User.query.filter_by(id=x).first().date_created, 0)]
+		for y in range(1, len(list(Solved.query.filter_by(user_id=x)))+1):
+			row = Solved.query.filter_by(user_id=x)[y-1]
+			data.append((row.timestamp, float(Challenge.query.filter_by(id=row.channel_id).first().points)+float(data[y-1][1])))
+		graph.add(User.query.filter_by(id=x).first().username, data)
+	graph_data = graph.render_data_uri()
+	return graph_data
 
 @app.route("/login/", methods=["GET", "POST"])
 def login():
@@ -122,7 +144,7 @@ def scoreboard():
 	string = ""
 	for user in User.query.all():
 		users.append(user)
-	return render_template("scoreboard.html", users=sort(users), length=len(users))
+	return render_template("scoreboard.html", users=sort(users), length=len(users), graph_data = get_graph_data(), graph_size = 1000)
 
 def sort(array_p):
 	array = array_p
