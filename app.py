@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, redirect, session, flash
+from flask import Flask, render_template, request, url_for, redirect, session, flash, abort
 from passlib.hash import sha256_crypt
 from wtforms import Form, TextField, PasswordField, validators
 from flask_sqlalchemy import SQLAlchemy
@@ -168,6 +168,8 @@ def sort(array_p):
 @app.route('/challenges/<path:path>', methods=["GET", "POST"])
 def catch_all(path):
 	challenge = Challenge.query.filter_by(name=path).first()
+	if challenge is None:
+		return abort(404)
 	if 'username' in session:
 		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
 			return render_template("answer_challenge.html", challenge=challenge, solved=True)
@@ -187,7 +189,16 @@ def catch_all(path):
 		flash('You have to log in before attempting any questions', at.red.value)
 		return redirect(url_for('login'))
 
-
+@app.route('/u', defaults={'path': ''})
+@app.route('/u/<path:path>', methods=["GET", "POST"])
+def catch_all_users(path):
+	solved_challenges = []
+	user = User.query.filter_by(username=path).first()
+	if user is None:
+		return abort(404)
+	for challenge in user.solved_challenges:
+		solved_challenges.append(challenge)
+	return render_template("user_info.html", solved_challenges = solved_challenges, user = user)
 
 if __name__ == "__main__":
 	app.run(threaded=True, debug=True, host="0.0.0.0")

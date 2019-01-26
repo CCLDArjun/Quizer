@@ -21,7 +21,7 @@
             </div>
           </a>
           {% for user in users %} 
-          <a class="list-group-item">
+          <a class="list-group-item" href="/u/{{ user.username }}">
             {% if users.index(user) == 0 %}
             <div id="header">
               <h4 style="float: left; width: 10%; text-align: left; color:gold;"><strong> {{ users.index(user)+1 }}</strong> </h4>
