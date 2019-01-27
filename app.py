@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect, session, flash, abort, send_file, send_from_directory
+from flask_paranoid import Paranoid
 from passlib.hash import sha256_crypt
 from wtforms import Form, TextField, PasswordField, validators
 from flask_sqlalchemy import SQLAlchemy
@@ -13,6 +14,8 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format("{}{}".format(os.popen("pwd").read()[:-1], "/databases/users.db"))
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
+paranoid = Paranoid(app)
+paranoid.redirect_view = '/'
 
 class Solved(db.Model):
 	__tablename__ = "solved"
@@ -126,6 +129,7 @@ def signup():
 @app.route("/logout/")
 def logout():
 	session.pop('username', None)
+	session.clear()
 	return redirect(url_for("home"))
 
 @app.route("/download/<filename>")
