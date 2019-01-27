@@ -1,9 +1,10 @@
-from flask import Flask, render_template, request, url_for, redirect, session, flash, abort
+from flask import Flask, render_template, request, url_for, redirect, session, flash, abort, send_file, send_from_directory
 from passlib.hash import sha256_crypt
 from wtforms import Form, TextField, PasswordField, validators
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from alert import AlertType as at
+from functools import wraps
 import pygal
 import datetime
 import os 
@@ -45,9 +46,23 @@ class Challenge(db.Model):
 	def __repr__(self):
 		return '<Challenge {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
 
+def login_required(f):
+	def func_wrapper(*args, **kwargs):  
+		try:
+			print(session['username'])
+		except Exception as e:
+			print(None)
+		if 'username' in session:
+			return f(*args, **kwargs)
+		else:
+			flash('Please Login First', at.red.value)
+			return redirect(url_for('login'))
+	return func_wrapper
+
+
 @app.route("/")
 def home():
-	return render_template("index.html", session=session)
+	return render_template('index.html', session=session)
 
 @app.route("/contact/")
 def contact():
@@ -113,12 +128,11 @@ def logout():
 	session.pop('username', None)
 	return redirect(url_for("home"))
 
-@app.route("/test/")
-def test():
-	if 'username' in session:
-		return "Yey"
-	else:
-		return "<h1>you dont have access to this page, {}</h1>".format(session)
+@app.route("/download/<filename>")
+@login_required
+def download(filename):
+	return send_file("{}/{}".format(os.popen("cd downloadables/; pwd").read()[:-1], filename))
+	
 
 @app.route("/challenges/")
 def challenges_page():
