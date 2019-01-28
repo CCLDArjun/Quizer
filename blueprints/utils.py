@@ -1,21 +1,15 @@
+from flask import Blueprint
 from flask import Flask, render_template, request, url_for, redirect, session, flash, abort, send_file, send_from_directory
 from flask_paranoid import Paranoid
 from passlib.hash import sha256_crypt
 from wtforms import Form, TextField, PasswordField, validators
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
-from alert import AlertType as at
 from functools import wraps
 import pygal
 import datetime
 import os 
-
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format("{}{}".format(os.popen("pwd").read()[:-1], "/databases/users.db"))
-db = SQLAlchemy(app)
-app.secret_key = os.urandom(24)
-paranoid = Paranoid(app)
-paranoid.redirect_view = '/'
+from blueprints.__init__ import db
 
 class Solved(db.Model):
 	__tablename__ = "solved"
@@ -48,17 +42,3 @@ class Challenge(db.Model):
 
 	def __repr__(self):
 		return '<Challenge {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
-
-
-
-@app.errorhandler(404)
-def page_not_found(e):
-    return render_template('404.html')
-
-
-
-
-
-
-if __name__ == "__main__":
-	app.run(threaded=True, debug=True, host="0.0.0.0")
