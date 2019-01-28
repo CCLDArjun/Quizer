@@ -9,7 +9,7 @@ from functools import wraps
 import pygal
 import datetime
 import os 
-from blueprints.__init__ import db
+from __init__ import db
 
 class Solved(db.Model):
 	__tablename__ = "solved"

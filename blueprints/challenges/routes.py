@@ -10,6 +10,7 @@ from functools import wraps
 import pygal
 import datetime
 import os 
+from blueprints import *
 
 mod = Blueprint('challenges', __name__)
 
@@ -45,7 +46,7 @@ def login_required(f):
 	return func_wrapper
 
 def get_graph_data():
-	graph = pygal.DateTimeLine(x_label_rotation=35, truncate_label=-1)
+	graph = pygal.DateTimeLine(x_label_rotation=35, truncate_label=-1, no_data_text="")
 	for x in range(1, len(User.query.all())+1):
 		if Solved.query.filter_by(user_id=x).first() is None:
 			continue
@@ -54,6 +55,8 @@ def get_graph_data():
 			row = Solved.query.filter_by(user_id=x)[y-1]
 			data.append((row.timestamp, float(Challenge.query.filter_by(id=row.channel_id).first().points)+float(data[y-1][1])))
 		graph.add(User.query.filter_by(id=x).first().username, data)
+		print(data)
+		print("----------")
 	graph_data = graph.render_data_uri()
 	return graph_data
 

@@ -1,2 +1,4 @@
-from blueprints import app
-app.run()
+from blueprints import *
+db.create_all()
+db.session.commit()
+app.run(debug=True)

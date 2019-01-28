@@ -10,6 +10,7 @@ from functools import wraps
 import pygal
 import datetime
 import os 
+from blueprints import *
 
 mod = Blueprint('users', __name__)
 
