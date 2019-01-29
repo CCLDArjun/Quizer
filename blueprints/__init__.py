@@ -10,8 +10,8 @@ import pygal
 import datetime
 import os 
 
-app = Flask(__name__, template_folder=os.path.abspath("../templates"))
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////Users/arjunbemarkar/Python/Flask/CTF-Client/databases/users.db"  #"sqlite:///{}".format("{}{}".format(os.popen("cd ..; pwd").read()[:-1], "/databases/users.db"))
+app = Flask(__name__, template_folder=os.path.abspath("templates"))
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format(os.path.abspath("databases/users.db"))  #"sqlite:///{}".format("{}{}".format(os.popen("cd ..; pwd").read()[:-1], "/databases/users.db"))
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
 paranoid = Paranoid(app)
@@ -57,10 +57,12 @@ def page_not_found(e):
 from blueprints.users.routes import mod as user
 from blueprints.main.routes import mod as main
 from blueprints.challenges.routes import mod as challenges
+from blueprints.admin.routes import mod as admin
 
 app.register_blueprint(user)
 app.register_blueprint(challenges)
 app.register_blueprint(main)
+app.register_blueprint(admin, url_prefix='/admin/')
 
 
 

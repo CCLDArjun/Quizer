@@ -10,7 +10,7 @@ from functools import wraps
 import pygal
 import datetime
 import os 
-from blueprints import *
+from blueprints import User, Challenge, Solved
 
 mod = Blueprint('users', __name__)
 
