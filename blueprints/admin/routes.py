@@ -12,7 +12,16 @@ import datetime
 import os 
 from blueprints import *
 
-mod = Blueprint('admin', __name__)
+mod = Blueprint('admin', __name__, template_folder="admin_templates")
+
+
+@mod.before_request
+def check_admin():
+	try:
+		if session['username'] != "admin":
+			abort(403)
+	except KeyError:
+		abort(403)
 
 @mod.route('/')
 def homepage():

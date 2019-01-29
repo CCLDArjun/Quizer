@@ -53,6 +53,9 @@ class Challenge(db.Model):
 def page_not_found(e):
     return render_template('404.html')
 
+@app.errorhandler(403)
+def page_not_found(e):
+    return render_template('403.html')
 
 from blueprints.users.routes import mod as user
 from blueprints.main.routes import mod as main
