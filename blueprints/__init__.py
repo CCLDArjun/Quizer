@@ -10,10 +10,8 @@ import pygal
 import datetime
 import os 
 
-template_dir = os.path.abspath('../templates/')
-app = Flask(__name__, template_folder="/Users/arjunbemarkar/Python/Flask/CTF-Client/templates")
-
-app.config['SQLALCHEMY_DATABASE_URI'] ="sqlite:////Users/arjunbemarkar/Python/Flask/CTF-Client/databases/users.db" #"sqlite:///{}".format("{}{}".format(os.popen("cd ..; pwd").read()[:-1], "/databases/users.db"))
+app = Flask(__name__, template_folder=os.path.abspath("../templates"))
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:////Users/arjunbemarkar/Python/Flask/CTF-Client/databases/users.db"  #"sqlite:///{}".format("{}{}".format(os.popen("cd ..; pwd").read()[:-1], "/databases/users.db"))
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
 paranoid = Paranoid(app)
