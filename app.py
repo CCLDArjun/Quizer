@@ -29,9 +29,9 @@ class User(db.Model):
 	__tablename__ = "users"
 	id = db.Column(db.Integer, primary_key=True)
 	username = db.Column(db.String(20), unique=True, nullable=False)
-	password = db.Column(db.String(80), unique=True, nullable=False)
+	password = db.Column(db.String(80), unique=False, nullable=False)
 	email = db.Column(db.String(80), unique=True, nullable=False)
-	points = db.Column(db.Integer, unique=True, nullable=False)
+	points = db.Column(db.Integer, unique=False, nullable=False)
 	date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
 	solved_challenges = db.relationship('Challenge', secondary="solved", backref=db.backref('solved_users', lazy='dynamic'))
 
