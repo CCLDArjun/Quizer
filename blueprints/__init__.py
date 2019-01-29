@@ -51,6 +51,10 @@ class Challenge(db.Model):
 	def __repr__(self):
 		return '<Challenge {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
 
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html')
+
 
 from blueprints.users.routes import mod as user
 from blueprints.main.routes import mod as main
