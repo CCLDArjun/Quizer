@@ -3,46 +3,34 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <h1 class="mt-5" align="center"><strong>Challenges</strong></h1>
-<h3 class="mt-9" align="center">{{ points }} Points</h3>
+<h3 class="mt-9" align="center">You currently have {{ points }} Points</h3>
 <div class="container">
   <div class="row">
     <div class="col-lg-12 text-center">
-
-      <div class="container">
-        <div class="row">
-          <div class="col-sm">
-            One of three columns
-          </div>
-          <div class="col-sm">
-            One of three columns
-          </div>
-          <div class="col-sm">
-            One of three columns
-          </div>
-        </div>
-      </div>
-
-      <!-- <div class="container">
-        <div class="list-group">
-          {% for challenge in challenges %} 
-          {% if challenge in solved_challenges %}
-          <a href="./{{ challenge.name }}" class="list-group-item">
-            <div id="header">
-              <h4 style="float: left; width: 50%; text-align: left; color:green;"> {{ challenge.name }} </h4>
-              <h4 style="float: left; width: 50%; text-align: right; color:green;"> {{ challenge.points }} </h4>
+      <div class="container-fluid" style="grid-row-gap: 20px">
+        <div class="row" style="margin-top: 20px">
+        
+          {% for challenge in challenges %}
+            <div class="col-sm-3" style="padding-top: 20px">
+              <a style="text-decoration: none;"href="./{{ challenge.name }}">
+              <div class="bg-dark">
+              <br>
+              {% if challenge in solved_challenges %} 
+                <h4 class="mt-9"style="float: center; text-align: center; color:green;"><strong>{{ challenge.name }}</strong></h4>
+                <br>
+                <h4 class="mt-9" style="float: center; text-align: center; color:green;">{{ challenge.points }}</h4>
+              {% else %}
+                <h4 class="mt-9" style="float: center; text-align: center; color:white;"><strong>{{ challenge.name }}</strong></h4>
+                <br>
+                <h4 class="mt-9" style="float: center; text-align: center; color:white;">{{ challenge.points }}</h4>
+              {% endif %}
+              <br>
+              </div>
+              </a>
             </div>
-          </a>
-          {% else %}
-          <a href="./{{ challenge.name }}" class="list-group-item">
-            <div id="header">
-              <h4 style="float: left; width: 50%; text-align: left;"> {{ challenge.name }} </h4>
-              <h4 style="float: left; width: 50%; text-align: right;"> {{ challenge.points }} </h4>
-            </div>
-          </a>
-          {% endif %}
           {% endfor %}
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </div>
