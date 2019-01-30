@@ -1,0 +1,37 @@
+{% extends "admin_templates/admin_header.html"%}
+{% block body %}
+
+<div class="mt-5"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="card card-signin mt-1">
+        <div class="card-body">
+          <h5 class="card-title text-center">Add a New Challenge</h5>
+          <form class="form-signin" action="" method="post">
+            <div class="form-label-group">
+              <input type="text" id="inputName" class="form-control" placeholder="Name" name="name" value="{{request.form.name}}" required autofocus>
+            </div>
+            <br>
+            <div class="form-label-group">
+              <input type="number" id="inputPoints" class="form-control" placeholder="Points" name="points" value="{{request.form.points}}" required>
+            </div>
+            <br>
+            <div class="form-label-group">
+              <!-- <input type="text" id="inputContent" class="form-control" placeholder="Content" name="content" value="{{request.form.content}}" style="height: 250px" required> -->
+              <textarea name="content" class="form-control" placeholder="Content" style="height: 250px"></textarea>
+            </div>
+            <br>
+            <div class="form-label-group">
+              <input type="text" id="inputAnswer" class="form-control" placeholder="Answer" name="answer" value="{{request.form.answer}}" required>
+            </div>
+            <br>
+            <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -26,3 +26,29 @@ def check_admin():
 @mod.route('/')
 def homepage():
 	return render_template("admin_templates/index.html")
+
+@mod.route('/add_challenge/', methods=["GET", "POST"])
+def add_challenge():
+	if request.method == "POST":
+		name = request.form["name"]
+		answer = request.form["answer"]
+		points = int(request.form["points"])
+		content = request.form["content"]
+		for challenge in Challenge.query.all():
+			if challenge.name.lower() == name.lower():
+				flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
+				return render_template("admin_templates/add_challenge.html")			
+		new_challenge = Challenge(name=name, answer=answer, points=points, content=content)
+		db.session.add(new_challenge)
+		db.session.commit()
+	return render_template("admin_templates/add_challenge.html")
+
+
+
+
+
+
+
+
+
+
