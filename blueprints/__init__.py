@@ -57,6 +57,10 @@ def page_not_found(e):
 def page_not_found(e):
     return render_template('403.html')
 
+@app.before_request
+def make_session_permanent():
+    session.permanent = True
+
 from blueprints.users.routes import mod as user
 from blueprints.main.routes import mod as main
 from blueprints.challenges.routes import mod as challenges
