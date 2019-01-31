@@ -43,6 +43,25 @@ def add_challenge():
 		db.session.commit()
 	return render_template("admin_templates/add_challenge.html")
 
+@mod.route('/edit_challenge', defaults={'path': ''})
+@mod.route('/edit_challenge/<path:path>', methods=["GET", "POST"])
+def edit_challenge(path):
+	challenge = Challenge.query.filter_by(name=path).first()
+	if challenge is None:
+		return abort(404)
+	if request.method == "POST":
+		if request.form["name"] != path:
+			for challenge in Challenge.query.all():
+				if challenge.name == request.form["name"]:
+					flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
+					return render_template("admin_templates/add_challenge.html", type="edit", challenge=challenge)
+		challenge.name = request.form["name"]
+		challenge.answer = request.form["answer"]
+		challenge.points = int(request.form["points"])
+		challenge.content = request.form["content"]
+		db.session.commit()
+		flash("successfully edited challenge", at.green.value)
+	return render_template("admin_templates/add_challenge.html", type="edit", challenge=challenge)
 
 
 

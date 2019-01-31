@@ -44,6 +44,11 @@
           <li class="nav-item">
             <a class="nav-link" href="/scoreboard/">Scoreboard</a>
           </li>
+          {% if session["username"] == "admin" %}
+          <li class="nav-item">
+            <a class="nav-link" href="/admin/">Admin</a>
+          </li>
+          {% endif %}
           {% if 'username' in session %}
           <li class="nav-item">
             <a class="nav-link" href="/challenges/">Challenges</a>
