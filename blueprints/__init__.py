@@ -33,10 +33,11 @@ class User(db.Model):
 	email = db.Column(db.String(80), unique=True, nullable=False)
 	points = db.Column(db.Integer, unique=False, nullable=False)
 	date_created = db.Column(db.DateTime, default=datetime.datetime.utcnow)
+	tries = db.Column(db.Integer, unique=False, default=0)
 	solved_challenges = db.relationship('Challenge', secondary="solved", backref=db.backref('solved_users', lazy='dynamic'))
 
 	def __repr__(self):
-		return '<User {}, {}, {}, {}>'.format(self.username, self.password, self.email, self.points)
+		return '<User {}, {}, {}, {}, tries: {}>'.format(self.username, self.password, self.email, self.points, self.tries)
 
 class Challenge(db.Model):
 	__tablename__ = "challenges"
@@ -45,6 +46,8 @@ class Challenge(db.Model):
 	points = db.Column(db.Integer, unique=False, nullable=False)
 	content = db.Column(db.String(225), unique=False, nullable=False)
 	answer = db.Column(db.String(225), unique=False, nullable=False)
+	tries = db.Column(db.Integer, unique=False, default=0)
+	attachment_filename = db.Column(db.String(255), unique=False, nullable=True)
 
 	def __repr__(self):
 		return '<Challenge {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)

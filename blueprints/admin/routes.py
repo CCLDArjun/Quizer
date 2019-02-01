@@ -41,6 +41,7 @@ def add_challenge():
 		new_challenge = Challenge(name=name, answer=answer, points=points, content=content)
 		db.session.add(new_challenge)
 		db.session.commit()
+		flash("Created New Challenge", at.green.value)
 	return render_template("admin_templates/add_challenge.html")
 
 @mod.route('/edit_challenge', defaults={'path': ''})
@@ -62,7 +63,6 @@ def edit_challenge(path):
 		db.session.commit()
 		flash("successfully edited challenge", at.green.value)
 	return render_template("admin_templates/add_challenge.html", type="edit", challenge=challenge)
-
 
 
 

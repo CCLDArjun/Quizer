@@ -70,10 +70,14 @@ def catch_all(path):
 		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
 			return render_template("answer_challenge.html", challenge=challenge, solved=True)
 		if request.method == "POST":
+			print("hi")
+			user=User.query.filter_by(username=session['username'])[0]
+			user.tries += 1
+			challenge.tries += 1
+			db.session.commit()
 			attempted_answer = str(request.form['answer'])
 			if challenge.answer == attempted_answer:
 				flash('Correct!', at.green.value)
-				user=User.query.filter_by(username=session['username'])[0]
 				user.points += challenge.points
 				challenge.solved_users.append(user)
 				db.session.commit()
