@@ -48,10 +48,17 @@
               <div class="form-label-group">
                 <h4>Content:</h4><textarea name="content" class="form-control" placeholder="Content" style="height: 250px">{{ challenge.content }}</textarea><br>
               </div>
-              <div class="form-group">
-                <label for="exampleFormControlFile1"><h4>Add Attachment: </h4></label>
-                <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
-              </div> 
+              {% if challenge.attachment_filename %}
+                <div class="form-group">
+                  <label for="exampleFormControlFile1"><h4>Add a new Attachment: </h4></label>
+                  <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+                </div> 
+              {% else %}
+                <div class="form-group">
+                  <label for="exampleFormControlFile1"><h4>Add Attachment: </h4></label>
+                  <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+                </div> 
+              {% endif %}
               <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Save</button>
             {% endif %}
           </form>
