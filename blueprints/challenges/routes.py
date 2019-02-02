@@ -63,7 +63,7 @@ def get_graph_data():
 @mod.route('/challenges', defaults={'path': ''})
 @mod.route('/challenges/<path:path>', methods=["GET", "POST"])
 def catch_all(path):
-	challenge = Challenge.query.filter_by(name=path).first()
+	challenge = Challenge.query.filter_by(id=path).first()
 	if challenge is None:
 		return abort(404)
 	if 'username' in session:
@@ -89,11 +89,15 @@ def catch_all(path):
 		flash('You have to log in before attempting any questions', at.red.value)
 		return redirect(url_for('users.login'))
 
-@mod.route("/download/<filename>")
+@mod.route("/download/<input_id>")
 @login_required
-def download(filename):
+def download(input_id):
 	try:
-		return send_file("{}/{}".format(os.popen("cd downloadables/; pwd").read()[:-1], filename), as_attachment=True)
+		challenge = Challenge.query.filter_by(id=input_id).first()
+		if challenge:
+			return send_file(challenge.attachment_filename, as_attachment=True)
+		else:
+			raise FileNotFoundError
 	except FileNotFoundError:
 		flash("no such file to download", at.red.value)
 		return redirect(url_for("main.home"))

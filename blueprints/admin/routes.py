@@ -40,14 +40,14 @@ def add_challenge():
 				flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
 				return render_template("admin_templates/add_challenge.html")
 		file=request.files["file"]
-		has_file = None
+		download_filepath = None
 		if 'file' in request.files:
 			file = request.files["file"]
 			if file and file.filename != " ":
 				extension = os.path.splitext(file.filename)[1]
 				file.save(os.path.join(os.path.abspath("downloadables"), name+extension))
-				has_file = "True"
-		new_challenge = Challenge(name=name, answer=answer, points=points, content=content, attachment_filename=has_file)
+				download_filepath = os.path.join(os.path.abspath("downloadables"), name+extension)
+		new_challenge = Challenge(name=name, answer=answer, points=points, content=content, attachment_filename=download_filepath)
 		db.session.add(new_challenge)
 		db.session.commit()
 		flash("Created New Challenge", at.green.value)
@@ -56,15 +56,22 @@ def add_challenge():
 @mod.route('/edit_challenge', defaults={'path': ''})
 @mod.route('/edit_challenge/<path:path>', methods=["GET", "POST"])
 def edit_challenge(path):
-	challenge = Challenge.query.filter_by(name=path).first()
+	challenge = Challenge.query.filter_by(id=path).first()
 	if challenge is None:
 		return abort(404)
 	if request.method == "POST":
-		if request.form["name"] != path:
-			for challenge in Challenge.query.all():
-				if challenge.name == request.form["name"]:
-					flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
-					return render_template("admin_templates/add_challenge.html", type="edit", challenge=challenge)
+		if request.form["name"] != challenge.name:
+			if Challenge.query.filter_by(name=request.form["name"]) is not None:
+				flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
+				return render_template("admin_templates/add_challenge.html", type="edit", challenge=challenge)
+		if 'file' in request.files:
+			file = request.files["file"]
+			if file and file.filename != " ":
+				if challenge.attachment_filename is not None:
+					os.system("sudo rm -rf {}".format(challenge.attachment_filename))
+				extension = os.path.splitext(file.filename)[1]
+				file.save(os.path.join(os.path.abspath("downloadables"), request.form["name"]+extension))
+				challenge.attachment_filename = os.path.join(os.path.abspath("downloadables"), request.form["name"]+extension)
 		challenge.name = request.form["name"]
 		challenge.answer = request.form["answer"]
 		challenge.points = int(request.form["points"])

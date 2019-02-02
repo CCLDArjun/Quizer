@@ -185,7 +185,7 @@ def sort(array_p):
 @app.route('/challenges', defaults={'path': ''})
 @app.route('/challenges/<path:path>', methods=["GET", "POST"])
 def catch_all(path):
-	challenge = Challenge.query.filter_by(name=path).first()
+	challenge = Challenge.query.filter_by(id=path).first()
 	if challenge is None:
 		return abort(404)
 	if 'username' in session:
