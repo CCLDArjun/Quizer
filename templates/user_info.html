@@ -11,7 +11,7 @@
       <div class="container">
         <div class="list-group">
           {% for challenge in solved_challenges %}
-          <a href="#" class="list-group-item">
+          <a href="/challenges/{{ challenge.id }}" class="list-group-item">
             <div id="header">
               <h4 style="float: left; width: 50%; text-align: left; color:green;"> {{ challenge.name }} </h4>
               <h4 style="float: left; width: 50%; text-align: right; color:green;"> {{ challenge.points }} </h4>

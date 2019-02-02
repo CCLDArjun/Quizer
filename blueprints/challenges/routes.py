@@ -63,17 +63,21 @@ def get_graph_data():
 @mod.route('/challenges', defaults={'path': ''})
 @mod.route('/challenges/<path:path>', methods=["GET", "POST"])
 def catch_all(path):
-	challenge = Challenge.query.filter_by(name=path).first()
+	challenge = Challenge.query.filter_by(id=path).first()
 	if challenge is None:
 		return abort(404)
 	if 'username' in session:
 		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
 			return render_template("answer_challenge.html", challenge=challenge, solved=True)
 		if request.method == "POST":
+			print("hi")
+			user=User.query.filter_by(username=session['username'])[0]
+			user.tries += 1
+			challenge.tries += 1
+			db.session.commit()
 			attempted_answer = str(request.form['answer'])
 			if challenge.answer == attempted_answer:
 				flash('Correct!', at.green.value)
-				user=User.query.filter_by(username=session['username'])[0]
 				user.points += challenge.points
 				challenge.solved_users.append(user)
 				db.session.commit()
@@ -85,10 +89,18 @@ def catch_all(path):
 		flash('You have to log in before attempting any questions', at.red.value)
 		return redirect(url_for('users.login'))
 
-@mod.route("/download/<filename>")
+@mod.route("/download/<input_id>")
 @login_required
-def download(filename):
-	return send_file("{}/{}".format(os.popen("cd downloadables/; pwd").read()[:-1], filename))
+def download(input_id):
+	try:
+		challenge = Challenge.query.filter_by(id=input_id).first()
+		if challenge:
+			return send_file(challenge.attachment_filename, as_attachment=True)
+		else:
+			raise FileNotFoundError
+	except FileNotFoundError:
+		flash("no such file to download", at.red.value)
+		return redirect(url_for("main.home"))
 
 @mod.route('/scoreboard/')
 def scoreboard():

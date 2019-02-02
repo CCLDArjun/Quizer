@@ -1,0 +1,71 @@
+{% extends "admin_templates/admin_header.html"%}
+{% block body %}
+
+<div class="mt-5"></div>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <div class="card card-signin mt-1">
+        <div class="card-body">
+          {% if type != "edit" %}
+            <h5 class="card-title text-center">Create A New Challenge</h5>
+          {% else %}
+            <h5 class="card-title text-center">Change This Challenge</h5>
+          {% endif %}
+          <form class="form-signin" action="" method="post" enctype="multipart/form-data">
+            {% if type != "edit" %}
+              <div class="form-label-group">
+                <input type="text" id="inputName" class="form-control" placeholder="Name" name="name" value="{{request.form.name}}" required autofocus>
+              </div>
+              <br>
+              <div class="form-label-group">
+                <input type="number" id="inputPoints" class="form-control" placeholder="Points" name="points" value="{{request.form.points}}" required>
+              </div>
+              <br>
+              <div class="form-label-group">
+                <textarea name="content" class="form-control" placeholder="Content" style="height: 250px"></textarea>
+              </div>
+              <br>
+              <div class="form-label-group">
+                <input type="text" id="inputAnswer" class="form-control" placeholder="Answer" name="answer" value="{{request.form.answer}}" required>
+              </div>
+              <br>
+              <div class="form-group">
+                <label for="exampleFormControlFile1"><h4>Add Attachment: </h4></label>
+                <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+              </div> 
+              <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Create</button>
+            {% else %}
+              <div class="form-label-group">
+                <h4>Name:</h4><textarea name="name" class="form-control" placeholder="Name" style="height: 40px">{{ challenge.name }}</textarea><br>
+              </div>
+              <div class="form-label-group">
+                <h4>Points:</h4><textarea name="points" class="form-control" placeholder="Points" style="height: 40px">{{ challenge.points }}</textarea><br>
+              </div>
+              <div class="form-label-group">
+                <h4>Answer:</h4><textarea name="answer" class="form-control" placeholder="Answer" style="height: 40px">{{ challenge.answer }}</textarea><br>
+              </div>
+              <div class="form-label-group">
+                <h4>Content:</h4><textarea name="content" class="form-control" placeholder="Content" style="height: 250px">{{ challenge.content }}</textarea><br>
+              </div>
+              {% if challenge.attachment_filename %}
+                <div class="form-group">
+                  <label for="exampleFormControlFile1"><h4>Add a new Attachment: </h4></label>
+                  <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+                </div> 
+              {% else %}
+                <div class="form-group">
+                  <label for="exampleFormControlFile1"><h4>Add Attachment: </h4></label>
+                  <input type="file" class="form-control-file" id="exampleFormControlFile1" name="file">
+                </div> 
+              {% endif %}
+              <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Save</button>
+            {% endif %}
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br>
+{% endblock %}
