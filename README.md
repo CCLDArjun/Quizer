@@ -19,5 +19,5 @@ foo@bar:~$ pip3 -r install requirments.txt
 For this step, you will have to access `databases/users.db` with an sqlite3 client and add the questions in their respective columns
 5. Run the app!!
 ```console
-foo@bar:~$ python3 app.py
+foo@bar:~$ python3 run.py
 ```
