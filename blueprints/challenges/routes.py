@@ -92,7 +92,11 @@ def catch_all(path):
 @mod.route("/download/<filename>")
 @login_required
 def download(filename):
-	return send_file("{}/{}".format(os.popen("cd downloadables/; pwd").read()[:-1], filename))
+	try:
+		return send_file("{}/{}".format(os.popen("cd downloadables/; pwd").read()[:-1], filename), as_attachment=True)
+	except FileNotFoundError:
+		flash("no such file to download", at.red.value)
+		return redirect(url_for("main.home"))
 
 @mod.route('/scoreboard/')
 def scoreboard():

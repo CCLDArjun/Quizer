@@ -5,6 +5,7 @@ from passlib.hash import sha256_crypt
 from wtforms import Form, TextField, PasswordField, validators
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug import secure_filename
 from alert import AlertType as at
 from functools import wraps
 import pygal
@@ -37,8 +38,16 @@ def add_challenge():
 		for challenge in Challenge.query.all():
 			if challenge.name.lower() == name.lower():
 				flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
-				return render_template("admin_templates/add_challenge.html")			
-		new_challenge = Challenge(name=name, answer=answer, points=points, content=content)
+				return render_template("admin_templates/add_challenge.html")
+		file=request.files["file"]
+		has_file = None
+		if 'file' in request.files:
+			file = request.files["file"]
+			if file and file.filename != " ":
+				extension = os.path.splitext(file.filename)[1]
+				file.save(os.path.join(os.path.abspath("downloadables"), name+extension))
+				has_file = "True"
+		new_challenge = Challenge(name=name, answer=answer, points=points, content=content, attachment_filename=has_file)
 		db.session.add(new_challenge)
 		db.session.commit()
 		flash("Created New Challenge", at.green.value)
