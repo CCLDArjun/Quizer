@@ -1,5 +1,5 @@
-from flask import Blueprint
-from flask import Flask, render_template, request, url_for, redirect, session, flash, abort, send_file, send_from_directory
+import os
+from flask import Flask, render_template, request, url_for, redirect, session, flash, abort, send_file, send_from_directory, Blueprint
 from flask_paranoid import Paranoid
 from passlib.hash import sha256_crypt
 from wtforms import Form, TextField, PasswordField, validators
@@ -8,10 +8,10 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import pygal
 import datetime
-import os 
+ 
 
 app = Flask(__name__, template_folder=os.path.abspath("templates"))
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format(os.path.abspath("databases/users.db"))  #"sqlite:///{}".format("{}{}".format(os.popen("cd ..; pwd").read()[:-1], "/databases/users.db"))
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format(os.path.abspath("databases/users.db"))  
 db = SQLAlchemy(app)
 app.secret_key = os.urandom(24)
 paranoid = Paranoid(app)

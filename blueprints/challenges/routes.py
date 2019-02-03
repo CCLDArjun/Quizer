@@ -55,8 +55,6 @@ def get_graph_data():
 			row = Solved.query.filter_by(user_id=x)[y-1]
 			data.append((row.timestamp, float(Challenge.query.filter_by(id=row.channel_id).first().points)+float(data[y-1][1])))
 		graph.add(User.query.filter_by(id=x).first().username, data)
-		print(data)
-		print("----------")
 	graph_data = graph.render_data_uri()
 	return graph_data
 
