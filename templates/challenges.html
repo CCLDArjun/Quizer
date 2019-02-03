@@ -2,33 +2,31 @@
 {% block body %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<h1 class="mt-5" align="center"><strong>Challenges</strong></h1>
-<h3 class="mt-9" align="center">You currently have {{ points }} Points</h3>
+<div class="jumbotron bg-dark">
+  <div class="container">
+    <h1 class="mt-5 text-light" align=""><strong> Challenges</strong></h1>
+    <h3 class="mt-9 text-light" align=""> You currently have {{ points }} Points</h3>
+  </div>
+</div>
 <div class="container">
   <div class="row">
     <div class="col-lg-12 text-center">
       <div class="container-fluid" style="grid-row-gap: 20px">
         <div class="row" style="margin-top: 20px">
-        
           {% for challenge in challenges %}
             <div class="col-sm-3" style="padding-top: 20px">
               <a style="text-decoration: none;"href="./{{ challenge.id }}">
-              <div class="bg-dark">
-              <br>
-              {% if challenge in solved_challenges %} 
-                <h4 class="mt-9"style="float: center; text-align: center; color:green;"><strong>{{ challenge.name }}</strong></h4>
-                <br>
-                <h4 class="mt-9" style="float: center; text-align: center; color:green;">{{ challenge.points }}</h4>
-              {% else %}
-                <h4 class="mt-9" style="float: center; text-align: center; color:white;"><strong>{{ challenge.name }}</strong></h4>
-                <br>
-                <h4 class="mt-9" style="float: center; text-align: center; color:white;">{{ challenge.points }}</h4>
-              {% endif %}
-              <br>
-              </div>
+                {% if challenge in solved_challenges %} 
+                  <div class="bg-success">
+                {% else %}
+                  <div class="bg-dark">
+                {% endif %}
+                <br><h4 class="mt-9 text-light"style="float: center; text-align: center;"><strong>{{ challenge.name }}</strong></h4><br>
+                <h4 class="mt-9 text-light" style="float: center; text-align: center;">{{ challenge.points }}</h4><br>
+                  </div>
               </a>
             </div>
-          {% endfor %}
+            {% endfor %}
         </div>
       </div>
     </div>

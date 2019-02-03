@@ -2,7 +2,11 @@
 {% block body %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<h1 class="mt-5" align="center"><strong>Scoreboard</strong></h1>
+<div class="jumbotron bg-dark">
+  <div class="container">
+    <h1 class="mt-5 text-light" align=""><strong>Scoreboard</strong></h1>
+  </div>
+</div>
 <div class="container" align="center">
   <embed type="image/svg+xml" src={{graph_data|safe}} style='max-width:`{{ graph_size }}px; max-height:{{ graph_size }}px'/>
 </div>

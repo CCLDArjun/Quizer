@@ -2,11 +2,18 @@
 {% block body %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<h1 class="mt-5" align="center"><strong>{{ user.username }}</strong></h1>
-<h3 class="mt-9" align="center">{{ user.points }} Points</h3>
+<div class="jumbotron bg-dark">
+  <div class="container">
+    <h1 class="mt-5 text-light" align=""><strong>{{ user.username }}</strong></h1>
+    <h3 class="mt-9 text-light" align="">{{ user.points }} Points</h3>
+  </div>
+</div>
 <div class="container">
   <div class="row">
     <div class="col-lg-12 text-center">
+      <div class="container" align="left">
+        <embed type="image/svg+xml" src={{graph_data|safe}} style='max-width:`{{ graph_size }}px; max-height:{{ graph_size }}px'/>
+      </div>
       <h3 class="mt-9" align="center">Solved</h3>
       <div class="container">
         <div class="list-group">

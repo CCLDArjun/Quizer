@@ -8,11 +8,24 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from alert import AlertType as at
 from functools import wraps
 import pygal
+from pygal.style import Style
 import datetime
 import os 
 from blueprints import User, Challenge, Solved, db
 
 mod = Blueprint('users', __name__)
+
+def get_graph_data(username):
+	custom_style = Style(colors=("#00ff00","#ff0000"), background="transparent")
+	graph = pygal.Pie(inner_radius=0.30, style=custom_style, width=500, height=400, explicit_size=True)
+	user = User.query.filter_by(username=username).first()
+	graph.title = "Accuracy %"
+	num_tries = int(user.tries)
+	num_correct = len(user.solved_challenges)
+	num_incorrect = num_tries - num_correct
+	graph.add("Correct", (num_correct/num_tries)*100)
+	graph.add("Incorrect", (num_incorrect/num_tries)*100)
+	return graph.render_data_uri()
 
 @mod.route("/login/", methods=["GET", "POST"])
 def login():
@@ -67,4 +80,4 @@ def catch_all_users(path):
 		return abort(404)
 	for challenge in user.solved_challenges:
 		solved_challenges.append(challenge)
-	return render_template("user_info.html", solved_challenges = solved_challenges, user = user)
+	return render_template("user_info.html", solved_challenges = solved_challenges, user = user, graph_data=get_graph_data(user.username))
