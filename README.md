@@ -1,5 +1,5 @@
 # Quizer
-Host an online quiz with just python and some dependencies installed!
+Host an online quiz or Capture The Flag Competition with just python and some dependencies installed!
 
 ### Installation and Setup
 1. Download Latest Release
