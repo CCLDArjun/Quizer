@@ -8,6 +8,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from alert import AlertType as at
 from functools import wraps
 import pygal
+from pygal.style import Style
 import datetime
 import os 
 from blueprints import *
@@ -46,7 +47,8 @@ def login_required(f):
 	return func_wrapper
 
 def get_graph_data():
-	graph = pygal.DateTimeLine(x_label_rotation=35, truncate_label=-1, no_data_text="")
+	custom_style = Style(background="transparent")
+	graph = pygal.DateTimeLine(x_label_rotation=35, truncate_label=-1, no_data_text="", style=custom_style, width=1000, height=500, explicit_size=True)
 	for x in range(1, len(User.query.all())+1):
 		if Solved.query.filter_by(user_id=x).first() is None:
 			continue
