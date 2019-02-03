@@ -15,6 +15,7 @@
         {% else %}
           <h3 align="left">{{ num_solves }} Solves</h3>
         {% endif %}
+        
         <h1 class="mt-5" align="center"><strong>{{ challenge.name }}</strong></h1>
         <h6 class="mt-9" align="center">{{ challenge.content }}</h6>
         <br>
@@ -34,8 +35,35 @@
         {% else %}
         <h3 class="mt-9" align="center" style="color:green;"><strong> You Have Already Solved This One! </strong></h6>
           {% endif %}
-        </div>
+          <br><br><br>
+          {% if graph_data %}
+          <div style="float: left">
+          <h3>Accuracy %</h3>
+          <div class="container" align="center">
+              <embed type="image/svg+xml" src={{graph_data|safe}} style='max-width:`{{ graph_size }}px; max-height:{{ graph_size }}px'/>
+            </div>
+          </div>
+          {% endif %}
+          {% if num_solves > 0 %}
+          <h3>Players who have already solved this challenge: </h3>
+            <div class="list-group">
+              {% for user in challenge.solved_users %}
+              <a href="/u/{{ user.username }}" class="list-group-item">
+                <div id="header">
+                  <h4 style="float: left; width: 50%; text-align: left; color:green;"> {{ user.username }} </h4>
+                  <h4 style="float: left; width: 50%; text-align: right; color:green;"> {{ user.points }} </h4>
+                </div>
+              </a>
+              {% endfor %}
+            </div>
+          {% endif %}
+          <!-- </div> -->
       </div>
     </div>
+    
+
+    
+
+
   </div>
   {% endblock %}

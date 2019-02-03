@@ -16,16 +16,19 @@ from blueprints import User, Challenge, Solved, db
 mod = Blueprint('users', __name__)
 
 def get_graph_data(username):
-	custom_style = Style(colors=("#00ff00","#ff0000"), background="transparent")
-	graph = pygal.Pie(inner_radius=0.30, style=custom_style, width=500, height=400, explicit_size=True)
-	user = User.query.filter_by(username=username).first()
-	graph.title = "Accuracy %"
-	num_tries = int(user.tries)
-	num_correct = len(user.solved_challenges)
-	num_incorrect = num_tries - num_correct
-	graph.add("Correct", (num_correct/num_tries)*100)
-	graph.add("Incorrect", (num_incorrect/num_tries)*100)
-	return graph.render_data_uri()
+	try:
+		custom_style = Style(colors=("#00ff00","#ff0000"), background="transparent")
+		graph = pygal.Pie(inner_radius=0.30, style=custom_style, width=500, height=400, explicit_size=True)
+		user = User.query.filter_by(username=username).first()
+		graph.title = "Accuracy %"
+		num_tries = int(user.tries)
+		num_correct = len(user.solved_challenges)
+		num_incorrect = num_tries - num_correct
+		graph.add("Correct", (num_correct/num_tries)*100)
+		graph.add("Incorrect", (num_incorrect/num_tries)*100)
+		return graph.render_data_uri()
+	except ZeroDivisionError:
+		return None
 
 @mod.route("/login/", methods=["GET", "POST"])
 def login():

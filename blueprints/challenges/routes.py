@@ -60,6 +60,20 @@ def get_graph_data():
 	graph_data = graph.render_data_uri()
 	return graph_data
 
+def get_challenge_graph(name):
+	try:
+		custom_style = Style(colors=("#00ff00","#ff0000"), background="transparent")
+		graph = pygal.Pie(inner_radius=0.30, style=custom_style, width=500, height=400, explicit_size=True)
+		challenge = Challenge.query.filter_by(name=name).first()
+		num_tries = int(challenge.tries)
+		num_correct = challenge.solved_users.count()
+		num_incorrect = num_tries - num_correct
+		graph.add("Correct", (num_correct/num_tries)*100)
+		graph.add("Incorrect", (num_incorrect/num_tries)*100)
+		return graph.render_data_uri()
+	except ZeroDivisionError:
+		return None
+
 @mod.route('/challenges', defaults={'path': ''})
 @mod.route('/challenges/<path:path>', methods=["GET", "POST"])
 def catch_all(path):
@@ -68,7 +82,7 @@ def catch_all(path):
 		return abort(404)
 	if 'username' in session:
 		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
-			return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count())
+			return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))
 		if request.method == "POST":
 			print("hi")
 			user=User.query.filter_by(username=session['username'])[0]
@@ -81,10 +95,10 @@ def catch_all(path):
 				user.points += challenge.points
 				challenge.solved_users.append(user)
 				db.session.commit()
-				return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count())
+				return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))
 			else:
 				flash('Incorrect', at.yellow.value)
-		return render_template("answer_challenge.html", challenge=challenge, solved=False, num_solves=challenge.solved_users.count())
+		return render_template("answer_challenge.html", challenge=challenge, solved=False, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))
 	else:
 		flash('You have to log in before attempting any questions', at.red.value)
 		return redirect(url_for('users.login'))
