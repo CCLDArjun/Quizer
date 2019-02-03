@@ -1,4 +1,4 @@
-# CTF-Client
+# Quizer
 A ctf client made with python and flask
 
 ### Installation and Setup
