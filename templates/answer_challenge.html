@@ -8,12 +8,12 @@
     <div class="col-lg-12 text-center">
       <div class="container card-body" align="center">
         {% if session["username"] == "admin" %}
-          <h3 align="right"><a href="/admin/edit_challenge/{{ challenge.id }}">Edit</a></h3>
+        <h3 align="right"><a href="/admin/edit_challenge/{{ challenge.id }}">Edit</a></h3>
         {% endif %}
         {% if num_solves == 1 %}
-          <h3 align="left">{{ num_solves }} Solve</h3>
+        <h3 align="left">{{ num_solves }} Solve</h3>
         {% else %}
-          <h3 align="left">{{ num_solves }} Solves</h3>
+        <h3 align="left">{{ num_solves }} Solves</h3>
         {% endif %}
         
         <h1 class="mt-5" align="center"><strong>{{ challenge.name }}</strong></h1>
@@ -27,7 +27,7 @@
             </div>
             <br>
             {% if challenge.attachment_filename %}
-              <a href="/download/{{ challenge.id }}"><button class="btn btn-lg btn-success btn-block text-uppercase" type="button">Download</button></a><br>
+            <a href="/download/{{ challenge.id }}"><button class="btn btn-lg btn-success btn-block text-uppercase" type="button">Download</button></a><br>
             {% endif %}
             <button class="btn btn-lg btn-success btn-block text-uppercase" type="submit">Submit</button>
           </form>
@@ -38,32 +38,26 @@
           <br><br><br>
           {% if graph_data %}
           <div style="float: left">
-          <h3>Accuracy %</h3>
-          <div class="container" align="center">
+            <h3>Accuracy %</h3>
+            <div class="container" align="center">
               <embed type="image/svg+xml" src={{graph_data|safe}} style='max-width:`{{ graph_size }}px; max-height:{{ graph_size }}px'/>
             </div>
           </div>
           {% endif %}
           {% if num_solves > 0 %}
           <h3>Players who have already solved this challenge: </h3>
-            <div class="list-group">
-              {% for user in challenge.solved_users %}
-              <a href="/u/{{ user.username }}" class="list-group-item">
-                <div id="header">
-                  <h4 style="float: left; width: 50%; text-align: left; color:green;"> {{ user.username }} </h4>
-                  <h4 style="float: left; width: 50%; text-align: right; color:green;"> {{ user.points }} </h4>
-                </div>
-              </a>
-              {% endfor %}
-            </div>
+          <div class="list-group">
+            {% for user in challenge.solved_users %}
+            <a href="/u/{{ user.username }}" class="list-group-item">
+              <div id="header">
+                <h4 style="float: left; width: 50%; text-align: left; color:green;"> {{ user.username }} </h4>
+                <h4 style="float: left; width: 50%; text-align: right; color:green;"> {{ user.points }} </h4>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
           {% endif %}
-          <!-- </div> -->
+        </div>
       </div>
     </div>
-    
-
-    
-
-
-  </div>
-  {% endblock %}
+    {% endblock %}

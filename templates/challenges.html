@@ -14,22 +14,22 @@
       <div class="container-fluid" style="grid-row-gap: 20px">
         <div class="row" style="margin-top: 20px">
           {% for challenge in challenges %}
-            <div class="col-sm-3" style="padding-top: 20px">
-              <a style="text-decoration: none;"href="./{{ challenge.id }}">
-                {% if challenge in solved_challenges %} 
-                  <div class="bg-success">
+          <div class="col-sm-3" style="padding-top: 20px">
+            <a style="text-decoration: none;"href="./{{ challenge.id }}">
+              {% if challenge in solved_challenges %} 
+              <div class="bg-success">
                 {% else %}
-                  <div class="bg-dark">
-                {% endif %}
-                <br><h4 class="mt-9 text-light"style="float: center; text-align: center;"><strong>{{ challenge.name }}</strong></h4><br>
-                <h4 class="mt-9 text-light" style="float: center; text-align: center;">{{ challenge.points }}</h4><br>
-                  </div>
+                <div class="bg-dark">
+                  {% endif %}
+                  <br><h4 class="mt-9 text-light"style="float: center; text-align: center;"><strong>{{ challenge.name }}</strong></h4><br>
+                  <h4 class="mt-9 text-light" style="float: center; text-align: center;">{{ challenge.points }}</h4><br>
+                </div>
               </a>
             </div>
             {% endfor %}
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
-{% endblock %}
+  {% endblock %}
