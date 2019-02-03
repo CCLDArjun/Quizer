@@ -10,6 +10,11 @@
         {% if session["username"] == "admin" %}
           <h3 align="right"><a href="/admin/edit_challenge/{{ challenge.id }}">Edit</a></h3>
         {% endif %}
+        {% if num_solves == 1 %}
+          <h3 align="left">{{ num_solves }} Solve</h3>
+        {% else %}
+          <h3 align="left">{{ num_solves }} Solves</h3>
+        {% endif %}
         <h1 class="mt-5" align="center"><strong>{{ challenge.name }}</strong></h1>
         <h6 class="mt-9" align="center">{{ challenge.content }}</h6>
         <br>

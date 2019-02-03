@@ -68,7 +68,7 @@ def catch_all(path):
 		return abort(404)
 	if 'username' in session:
 		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
-			return render_template("answer_challenge.html", challenge=challenge, solved=True)
+			return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count())
 		if request.method == "POST":
 			print("hi")
 			user=User.query.filter_by(username=session['username'])[0]
@@ -81,10 +81,10 @@ def catch_all(path):
 				user.points += challenge.points
 				challenge.solved_users.append(user)
 				db.session.commit()
-				return render_template("answer_challenge.html", challenge=challenge, solved=True)
+				return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count())
 			else:
 				flash('Incorrect', at.yellow.value)
-		return render_template("answer_challenge.html", challenge=challenge, solved=False)
+		return render_template("answer_challenge.html", challenge=challenge, solved=False, num_solves=challenge.solved_users.count())
 	else:
 		flash('You have to log in before attempting any questions', at.red.value)
 		return redirect(url_for('users.login'))
