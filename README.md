@@ -1,5 +1,5 @@
 # Quizer
-A ctf client made with python and flask
+Host an online quiz with just python and some dependencies installed!
 
 ### Installation and Setup
 1. Download Latest Release
