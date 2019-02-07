@@ -12,6 +12,7 @@ import pygal
 import datetime
 import os 
 from blueprints import *
+from blueprints.utils import ChallengeAttempt
 
 mod = Blueprint('admin', __name__, template_folder="admin_templates")
 
