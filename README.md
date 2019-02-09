@@ -21,7 +21,7 @@ foo@bar:~$ python3 install.py
 ```
 
 4. Run the app!!
-There are many ways to deploy this. `gunicorn` is recomended.
+There are many ways to deploy this. `gunicorn` is recomended, make sure to run `run.py` and not `app.py`.
 
 5. Setup Challenges and Admin
 Once you have the website running, signup a new user named `admin`, and click on the Admin link on the top of the page, then go to create a challenge and enter info
