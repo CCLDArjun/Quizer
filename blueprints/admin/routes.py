@@ -9,6 +9,7 @@ from werkzeug import secure_filename
 from alert import AlertType as at
 from functools import wraps
 import pygal
+from pygal.style import Style
 import datetime
 import os 
 from blueprints import *
@@ -16,6 +17,18 @@ from blueprints.utils import ChallengeAttempt
 
 mod = Blueprint('admin', __name__, template_folder="admin_templates")
 
+def get_people_graph():
+	custom_style = Style(background="transparent")
+	graph = pygal.Line(x_label_rotation=35, truncate_label=-1, no_data_text="", style=custom_style, width=1000, height=400, explicit_size=True)
+	x_labels = []
+	data = []
+	for i in range(1,len(User.query.all())+1):
+		data.append(i)
+		x_labels.append(User.query.filter_by(id=i).first().date_created)
+	graph.x_labels = x_labels
+	graph.add("Count", data)
+	graph_data = graph.render_data_uri()
+	return graph_data
 
 @mod.before_request
 def check_admin():
@@ -27,7 +40,18 @@ def check_admin():
 
 @mod.route('/')
 def homepage():
-	return render_template("admin_templates/index.html")
+	custom_style = Style(background="transparent", min_scale=1)
+	graph = pygal.Bar(style=custom_style, width=700, height=200, explicit_size=True)
+	num_tries = 0
+	num_solves = 0
+	for challenge in Challenge.query.all():
+		num_tries += challenge.tries
+		num_solves += challenge.solved_users.count()
+		if challenge.solved_users.count() == 0:
+			continue
+		graph.add(challenge.name, [challenge.solved_users.count()])
+	graph_data = graph.render_data_uri()
+	return render_template("admin_templates/index.html", graph_data=graph_data, num_users=len(User.query.all()), num_challenges=len(Challenge.query.all()), num_solves=float(num_solves), num_tries=float(num_tries), people_overtime_graph=get_people_graph())
 
 @mod.route("/submissions/")
 def submissions():
