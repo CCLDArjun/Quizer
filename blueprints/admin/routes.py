@@ -29,6 +29,10 @@ def check_admin():
 def homepage():
 	return render_template("admin_templates/index.html")
 
+@mod.route("/submissions/")
+def submissions():
+	return render_template("admin_templates/admin_submissions.html", submissions=ChallengeAttempt.get_submissions())
+
 @mod.route('/add_challenge/', methods=["GET", "POST"])
 def add_challenge():
 	if request.method == "POST":

@@ -12,6 +12,7 @@ from pygal.style import Style
 import datetime
 import os 
 from blueprints import *
+from blueprints.utils import ChallengeAttempt
 
 mod = Blueprint('challenges', __name__)
 
@@ -84,12 +85,12 @@ def catch_all(path):
 		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
 			return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))
 		if request.method == "POST":
-			print("hi")
 			user=User.query.filter_by(username=session['username'])[0]
 			user.tries += 1
 			challenge.tries += 1
 			db.session.commit()
 			attempted_answer = str(request.form['answer'])
+			ChallengeAttempt.add(challenge.name, session['username'], datetime.datetime.utcnow(), attempted_answer)
 			if challenge.answer == attempted_answer:
 				flash('Correct!', at.green.value)
 				user.points += challenge.points

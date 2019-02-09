@@ -1,49 +1,53 @@
 import pickle
+import datetime
+from datetime import date
 
 pickle_loc = "databases/inputData.pickle"
 class ChallengeAttempt:
 	time = None
 	content = None
 	username = None
-	def __init__(self, time, content, username):
+	challenge_name = None
+	def __init__(self, time, content, username, challenge_name):
 		self.time = time
 		self.content = content
 		self.username = username
+		self.challenge_name = challenge_name
 
 	def __repr__(self):
-		return "<ChallengeAttempt Content: {}, Time: {}, User: {}>\n".format(self.content, self.time, self.username)
+		return "<ChallengeAttempt Content: {}, Time: {}, User: {}, ChallengeName: {}>\n".format(self.content, self.time, self.username, self.challenge_name)
 
+	'''DO NOT CALL THIS OUTSIDE'''
 	@staticmethod
-	def save_content(example_dict):
+	def _save_content(example_dict):
 		input_data_file = open(pickle_loc, "wb")
 		pickle.dump(example_dict, input_data_file)
 		input_data_file.close()
 
+	'''DO NOT CALL THIS OUTSIDE'''
 	@staticmethod
-	def get_all_content():
+	def _get_raw_data():
 		input_data_file = open(pickle_loc, "rb")
 		try:
 			example_dict = pickle.load(input_data_file)
 			return example_dict
 		except EOFError:
-			return {}
+			return []
 
 	@staticmethod
-	def save_to_challenge(name, username, time, content):
-		data = ChallengeAttempt.get_all_content()
-		try:
-			data[name].append(ChallengeAttempt(time, content, username))
-		except KeyError:
-			data[name] = [ChallengeAttempt(time, content, username)]
-		ChallengeAttempt.save_content(data)
+	def add(name, username, time, content):
+		data = ChallengeAttempt._get_raw_data()
+		data.append(ChallengeAttempt(time, content, username, name))
+		ChallengeAttempt._save_content(data)
 
 	@staticmethod
-	def get_from_challenge(name):
-		data = ChallengeAttempt.get_all_content()
-		try:
-			return data[name]
-		except KeyError:
-			return None
+	def get_submissions():
+		subs = ChallengeAttempt._get_raw_data()
+		for submission in subs:
+			delta = datetime.datetime.utcnow()-submission.time
+			submission.time = round(float(delta.days*24 + delta.seconds/3600), 2)
+		print(subs)
+		return subs
 
 
 
