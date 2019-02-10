@@ -15,8 +15,8 @@
 		<p>
 			<h3 class="mt-1">{{ num_challenges }} Challenges</h3>
 	  		<h3 class="mt-1">{{ num_users }} People</h3>
-	  		<h3 class="mt-1 text-success" >{{ (num_solves/num_tries)*100.0 }} % Correct Submitted</h3>
-	  		<h3 class="mt-1 text-danger" >{{ 100-((num_solves/num_tries)*100.0) }} % Incorrect Submitted</h3>
+	  		<h3 class="mt-1 text-success" >{{ 100*(num_solves/num_tries)|round(1) }} % Correct Submitted</h3>
+	  		<h3 class="mt-1 text-danger" >{{ 100-((num_solves/num_tries)*100.0)|round(1) }} % Incorrect Submitted</h3>
 	  	</p>
 	</div>
 	<div style="float: right;">

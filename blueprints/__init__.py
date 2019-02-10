@@ -48,9 +48,10 @@ class Challenge(db.Model):
 	answer = db.Column(db.String(225), unique=False, nullable=False)
 	tries = db.Column(db.Integer, unique=False, default=0)
 	attachment_filename = db.Column(db.String(255), unique=False, nullable=True)
+	dynamic_point_reduction = db.Column(db.Integer, default=0)
 
 	def __repr__(self):
-		return '<Challenge {} points: {} content: {} answer: {}>'.format(self.name, self.points, self.content[0:6], self.answer)
+		return '<Challenge {} points: {} content: {} answer: {} dynamic_point: {}>'.format(self.name, self.points, self.content[0:6], self.answer, self.dynamic_point_reduction)
 
 @app.errorhandler(404)
 def page_not_found(e):

@@ -27,6 +27,10 @@
             </div>
             <br>
             <div class="form-label-group">
+              <textarea name="dynamicPointVal" class="form-control" placeholder="Dynamic Point Value" style="height: 40px"></textarea>
+            </div>
+            <br>
+            <div class="form-label-group">
               <input type="text" id="inputAnswer" class="form-control" placeholder="Answer" name="answer" value="{{request.form.answer}}" required>
             </div>
             <br>
@@ -47,6 +51,9 @@
             </div>
             <div class="form-label-group">
               <h4>Content:</h4><textarea name="content" class="form-control" placeholder="Content" style="height: 250px">{{ challenge.content }}</textarea><br>
+            </div>
+            <div class="form-label-group">
+              <h4>Dynamic Point Value:</h4><h7>Leave As 0 if you dont want it dynamic</h7><textarea name="dynamicPointVal" class="form-control" placeholder="Dynamic Point Value" style="height: 40px">{{ challenge.dynamic_point_reduction }}</textarea><br>
             </div>
             {% if challenge.attachment_filename %}
             <div class="form-group">

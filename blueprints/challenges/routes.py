@@ -94,6 +94,8 @@ def catch_all(path):
 			if challenge.answer == attempted_answer:
 				flash('Correct!', at.green.value)
 				user.points += challenge.points
+				if challenge.points - challenge.dynamic_point_reduction >= 1:
+					challenge.points -= challenge.dynamic_point_reduction
 				challenge.solved_users.append(user)
 				db.session.commit()
 				return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))

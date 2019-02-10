@@ -59,7 +59,7 @@ def homepage():
 			continue
 		graph.add(challenge.name, [challenge.solved_users.count()])
 	graph_data = graph.render_data_uri()
-	return render_template("admin_templates/index.html", graph_data=graph_data, num_users=len(User.query.all()), num_challenges=len(Challenge.query.all()), num_solves=float(num_solves), num_tries=float(num_tries), people_overtime_graph=get_people_graph())
+	return render_template("admin_templates/index.html", graph_data=graph_data, num_users=len(User.query.all()), num_challenges=len(Challenge.query.all()), num_solves=round(float(num_solves),2), num_tries=round(float(num_tries),2), people_overtime_graph=get_people_graph())
 
 @mod.route("/submissions/")
 def submissions():
@@ -76,7 +76,7 @@ def add_challenge():
 			if challenge.name.lower() == name.lower():
 				flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
 				return render_template("admin_templates/add_challenge.html")
-		file=request.files["file"]
+		file=None
 		download_filepath = None
 		if 'file' in request.files:
 			file = request.files["file"]
@@ -84,7 +84,7 @@ def add_challenge():
 				extension = os.path.splitext(file.filename)[1]
 				file.save(os.path.join(os.path.abspath("downloadables"), name+extension))
 				download_filepath = os.path.join(os.path.abspath("downloadables"), name+extension)
-		new_challenge = Challenge(name=name, answer=answer, points=points, content=content, attachment_filename=download_filepath)
+		new_challenge = Challenge(name=name, answer=answer, points=points, content=content, attachment_filename=download_filepath, dynamic_point_reduction=request.form["dynamicPointVal"])
 		db.session.add(new_challenge)
 		db.session.commit()
 		flash("Created New Challenge", at.green.value)
@@ -113,6 +113,7 @@ def edit_challenge(path):
 		challenge.answer = request.form["answer"]
 		challenge.points = int(request.form["points"])
 		challenge.content = request.form["content"]
+		challenge.dynamic_point_reduction = request.form["dynamicPointVal"]
 		db.session.commit()
 		flash("successfully edited challenge", at.green.value)
 	return render_template("admin_templates/add_challenge.html", type="edit", challenge=challenge)
