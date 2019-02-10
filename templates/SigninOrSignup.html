@@ -8,7 +8,7 @@
         <div class="card-body">
           <h5 class="card-title text-center">{{ type }}</h5>
           <form class="form-signin" action="" method="post">
-
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
             <div class="form-label-group">
               <input type="text" id="inputUsername" class="form-control" placeholder="Username" name="username" value="{{request.form.username}}" required autofocus>
             </div>

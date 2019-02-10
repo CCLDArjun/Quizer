@@ -41,6 +41,10 @@ WTForms == 2.2.1
 # blueprints/users/routes.py: 7
 Werkzeug == 0.14.1
 
+# blueprints/__init__.py: 11
+# blueprints/users/routes.py: 15
+flask_csrf == 0.9.2
+
 # app.py: 3
 # blueprints/__init__.py: 4
 # blueprints/admin/routes.py: 4
@@ -51,8 +55,8 @@ passlib == 1.7.1
 
 # app.py: 9
 # blueprints/__init__.py: 9
-# blueprints/admin/routes.py: 11
-# blueprints/challenges/routes.py: 10
+# blueprints/admin/routes.py: 11,12
+# blueprints/challenges/routes.py: 10,11
 # blueprints/main/routes.py: 10
-# blueprints/users/routes.py: 10
+# blueprints/users/routes.py: 10,11
 pygal == 2.4.0

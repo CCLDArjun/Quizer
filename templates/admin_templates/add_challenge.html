@@ -13,6 +13,7 @@
           <h5 class="card-title text-center">Change This Challenge</h5>
           {% endif %}
           <form class="form-signin" action="" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
             {% if type != "edit" %}
             <div class="form-label-group">
               <input type="text" id="inputName" class="form-control" placeholder="Name" name="name" value="{{request.form.name}}" required autofocus>

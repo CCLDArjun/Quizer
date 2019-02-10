@@ -8,11 +8,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
 import pygal
 import datetime
- 
+from flaskext.csrf import csrf
 
 app = Flask(__name__, template_folder=os.path.abspath("templates"))
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///{}".format(os.path.abspath("databases/users.db"))  
 db = SQLAlchemy(app)
+csrf(app)
 app.secret_key = os.urandom(24)
 paranoid = Paranoid(app)
 paranoid.redirect_view = '/'

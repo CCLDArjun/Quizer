@@ -12,6 +12,7 @@ from pygal.style import Style
 import datetime
 import os 
 from blueprints import User, Challenge, Solved, db
+from flaskext.csrf import *
 
 mod = Blueprint('users', __name__)
 
