@@ -19,7 +19,7 @@ mod = Blueprint('admin', __name__, template_folder="admin_templates")
 
 def get_people_graph():
 	custom_style = Style(background="transparent")
-	graph = pygal.Line(x_label_rotation=35, truncate_label=-1, no_data_text="", style=custom_style, width=1000, height=400, explicit_size=True)
+	graph = pygal.Line(show_legend=False,max_scale=len(User.query.all()),x_label_rotation=35, truncate_label=-1, no_data_text="", style=custom_style, width=1000, height=400, explicit_size=True)
 	x_labels = []
 	data = []
 	for i in range(1,len(User.query.all())+1):
@@ -30,18 +30,26 @@ def get_people_graph():
 	graph_data = graph.render_data_uri()
 	return graph_data
 
-@mod.before_request
-def check_admin():
-	try:
-		if session['username'] != "admin":
-			abort(403)
-	except KeyError:
-		abort(403)
+# @mod.before_request
+# def check_admin():
+# 	try:
+# 		if session['username'] != "admin":
+# 			abort(403)
+# 	except KeyError:
+# 		abort(403)
+
+def get_most_solves():
+	most=0
+	for challenge in Challenge.query.all():
+		solves = challenge.solved_users.count()
+		if  solves > most:
+			most = solves
+	return most+1
 
 @mod.route('/')
 def homepage():
-	custom_style = Style(background="transparent", min_scale=1)
-	graph = pygal.Bar(style=custom_style, width=700, height=200, explicit_size=True)
+	custom_style = Style(background="transparent")
+	graph = pygal.Bar(style=custom_style, min_scale=get_most_solves(),max_scale=get_most_solves(),width=650, height=200, explicit_size=True)
 	num_tries = 0
 	num_solves = 0
 	for challenge in Challenge.query.all():
