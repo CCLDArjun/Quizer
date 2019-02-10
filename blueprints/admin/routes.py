@@ -30,13 +30,13 @@ def get_people_graph():
 	graph_data = graph.render_data_uri()
 	return graph_data
 
-# @mod.before_request
-# def check_admin():
-# 	try:
-# 		if session['username'] != "admin":
-# 			abort(403)
-# 	except KeyError:
-# 		abort(403)
+@mod.before_request
+def check_admin():
+	try:
+		if session['username'] != "admin":
+			abort(403)
+	except KeyError:
+		abort(403)
 
 def get_most_solves():
 	most=0
