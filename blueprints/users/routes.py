@@ -13,6 +13,7 @@ import datetime
 import os 
 from blueprints import User, Challenge, Solved, db
 from flaskext.csrf import *
+import bleach
 
 mod = Blueprint('users', __name__)
 
@@ -62,7 +63,7 @@ def signup():
 		elif y:
 			flash("User with email has already been created", at.red.value)
 		else:
-			new_user = User(username=username, password=password, email=email, points=0)
+			new_user = User(username=bleach.clean(username), password=password, email=email, points=0)
 			db.session.add(new_user)
 			db.session.commit()
 			session['username'] = new_user.username
