@@ -21,7 +21,15 @@ admin(mod)
 
 def get_people_graph():
 	custom_style = Style(background="transparent")
-	graph = pygal.Line(show_legend=False,max_scale=len(User.query.all()),x_label_rotation=35, truncate_label=-1, no_data_text="", style=custom_style, width=1000, height=400, explicit_size=True)
+	graph = pygal.Line(show_legend=False,
+						max_scale=len(User.query.all()),
+						x_label_rotation=35, 
+						truncate_label=-1, 
+						no_data_text="", 
+						style=custom_style, 
+						width=1000, 
+						height=400, 
+						explicit_size=True)
 	x_labels = []
 	data = []
 	for i in range(1,len(User.query.all())+1):
@@ -43,7 +51,11 @@ def get_most_solves():
 @mod.route('/')
 def homepage():
 	custom_style = Style(background="transparent")
-	graph = pygal.Bar(style=custom_style, min_scale=get_most_solves(),max_scale=get_most_solves(),width=650, height=200, explicit_size=True)
+	graph = pygal.Bar(style=custom_style, 
+					min_scale=get_most_solves(),
+					max_scale=get_most_solves(),
+					width=650, height=200, 
+					explicit_size=True)
 	num_tries = 0
 	num_solves = 0
 	for challenge in Challenge.query.all():
@@ -53,11 +65,18 @@ def homepage():
 			continue
 		graph.add(challenge.name, [challenge.solved_users.count()])
 	graph_data = graph.render_data_uri()
-	return render_template("admin_templates/index.html", graph_data=graph_data, num_users=len(User.query.all()), num_challenges=len(Challenge.query.all()), num_solves=round(float(num_solves),2), num_tries=round(float(num_tries),2), people_overtime_graph=get_people_graph())
+	return render_template("admin_templates/index.html", 
+							graph_data=graph_data, 
+							num_users=len(User.query.all()), 
+							num_challenges=len(Challenge.query.all()), 
+							num_solves=round(float(num_solves),2), 
+							num_tries=round(float(num_tries),2), 
+							people_overtime_graph=get_people_graph())
 
 @mod.route("/submissions/")
 def submissions():
-	return render_template("admin_templates/admin_submissions.html", submissions=ChallengeAttempt.get_submissions())
+	return render_template("admin_templates/admin_submissions.html", 
+							submissions=ChallengeAttempt.get_submissions())
 
 @mod.route('/add_challenge/', methods=["GET", "POST"])
 def add_challenge():
@@ -78,7 +97,12 @@ def add_challenge():
 				extension = os.path.splitext(file.filename)[1]
 				file.save(os.path.join(os.path.abspath("downloadables"), name+extension))
 				download_filepath = os.path.join(os.path.abspath("downloadables"), name+extension)
-		new_challenge = Challenge(name=name, answer=answer, points=points, content=content, attachment_filename=download_filepath, dynamic_point_reduction=request.form["dynamicPointVal"])
+		new_challenge = Challenge(name=name, 
+									answer=answer, 
+									points=points, 
+									content=content, 
+									attachment_filename=download_filepath, 
+									dynamic_point_reduction=request.form["dynamicPointVal"])
 		db.session.add(new_challenge)
 		db.session.commit()
 		flash("Created New Challenge", at.green.value)
@@ -94,7 +118,9 @@ def edit_challenge(path):
 		if request.form["name"] != challenge.name:
 			if Challenge.query.filter_by(name=request.form["name"]) is not None:
 				flash("There is already a challenge with name {}".format(challenge.name), at.red.value)
-				return render_template("admin_templates/add_challenge.html", type="edit", challenge=challenge)
+				return render_template("admin_templates/add_challenge.html", 
+										type="edit", 
+										challenge=challenge)
 		if 'file' in request.files:
 			file = request.files["file"]
 			if file and file.filename != " ":
@@ -102,7 +128,8 @@ def edit_challenge(path):
 					os.system("sudo rm -rf {}".format(challenge.attachment_filename))
 				extension = os.path.splitext(file.filename)[1]
 				file.save(os.path.join(os.path.abspath("downloadables"), request.form["name"]+extension))
-				challenge.attachment_filename = os.path.join(os.path.abspath("downloadables"), request.form["name"]+extension)
+				challenge.attachment_filename = os.path.join(os.path.abspath("downloadables"), 
+															request.form["name"]+extension)
 		challenge.name = request.form["name"]
 		challenge.answer = request.form["answer"]
 		challenge.points = int(request.form["points"])

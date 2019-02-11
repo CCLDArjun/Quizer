@@ -49,7 +49,13 @@ def login_required(f):
 
 def get_graph_data():
 	custom_style = Style(background="transparent")
-	graph = pygal.DateTimeLine(x_label_rotation=35, truncate_label=-1, no_data_text="", style=custom_style, width=1000, height=500, explicit_size=True)
+	graph = pygal.DateTimeLine(x_label_rotation=35, 
+								truncate_label=-1, 
+								no_data_text="", 
+								style=custom_style, 
+								width=1000,
+								height=500,
+								explicit_size=True)
 	for x in range(1, len(User.query.all())+1):
 		if Solved.query.filter_by(user_id=x).first() is None:
 			continue
@@ -64,7 +70,11 @@ def get_graph_data():
 def get_challenge_graph(name):
 	try:
 		custom_style = Style(colors=("#00ff00","#ff0000"), background="transparent")
-		graph = pygal.Pie(inner_radius=0.30, style=custom_style, width=500, height=400, explicit_size=True)
+		graph = pygal.Pie(inner_radius=0.30, 
+							style=custom_style, 
+							width=500, 
+							height=400, 
+							explicit_size=True)
 		challenge = Challenge.query.filter_by(name=name).first()
 		num_tries = int(challenge.tries)
 		num_correct = challenge.solved_users.count()
@@ -83,7 +93,11 @@ def catch_all(path):
 		return abort(404)
 	if 'username' in session:
 		if challenge in User.query.filter_by(username=session['username']).first().solved_challenges:
-			return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))
+			return render_template("answer_challenge.html", 
+									challenge=challenge, 
+									solved=True, 
+									num_solves=challenge.solved_users.count(), 
+									graph_data=get_challenge_graph(challenge.name))
 		if request.method == "POST":
 			user=User.query.filter_by(username=session['username'])[0]
 			user.tries += 1
@@ -98,10 +112,18 @@ def catch_all(path):
 					challenge.points -= challenge.dynamic_point_reduction
 				challenge.solved_users.append(user)
 				db.session.commit()
-				return render_template("answer_challenge.html", challenge=challenge, solved=True, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))
+				return render_template("answer_challenge.html", 
+										challenge=challenge, 
+										solved=True, 
+										num_solves=challenge.solved_users.count(), 
+										graph_data=get_challenge_graph(challenge.name))
 			else:
 				flash('Incorrect', at.yellow.value)
-		return render_template("answer_challenge.html", challenge=challenge, solved=False, num_solves=challenge.solved_users.count(), graph_data=get_challenge_graph(challenge.name))
+		return render_template("answer_challenge.html", 
+								challenge=challenge, 
+								solved=False, 
+								num_solves=challenge.solved_users.count(), 
+								graph_data=get_challenge_graph(challenge.name))
 	else:
 		flash('You have to log in before attempting any questions', at.red.value)
 		return redirect(url_for('users.login'))
@@ -125,7 +147,11 @@ def scoreboard():
 	string = ""
 	for user in User.query.all():
 		users.append(user)
-	return render_template("scoreboard.html", users=sort(users), length=len(users), graph_data = get_graph_data(), graph_size = 1000)
+	return render_template("scoreboard.html", 
+							users=sort(users), 
+							length=len(users), 
+							graph_data = get_graph_data(), 
+							graph_size = 1000)
 
 @mod.route("/challenges/")
 def challenges_page():
@@ -136,7 +162,10 @@ def challenges_page():
 				if user.username == session['username']:
 					solvedChallenges.append(challenge)
 					continue
-		return render_template("challenges.html", challenges=Challenge.query.all(), points=User.query.filter_by(username=session['username']).first().points, solved_challenges=solvedChallenges)
+		return render_template("challenges.html", 
+								challenges=Challenge.query.all(), 
+								points=User.query.filter_by(username=session['username']).first().points, 
+								solved_challenges=solvedChallenges)
 	else:
 		flash('You have to sign up before attempting any questions', at.red.value)
 		return redirect(url_for('users.signup'))
