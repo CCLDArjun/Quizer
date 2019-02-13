@@ -1,8 +1,9 @@
 # Quizer
 Host an online quiz or Capture The Flag Competition with just python and some dependencies installed!
 
-:-------------------------:|:-------------------------:|:-------------------------:
-![Imgur](https://i.imgur.com/QTvaWDE.png) | [Imgur](https://i.imgur.com/JJMAUHg.png) | [Imgur](https://i.imgur.com/VdzWnQy.png)
+| [Imgur](https://i.imgur.com/QTvaWDE.png) | [Imgur](https://i.imgur.com/JJMAUHg.png) | [Imgur](https://i.imgur.com/VdzWnQy.png) |
+|------------------------------------------|-----------------------------------------|------------------------------------------|
+
 ## Installation and Setup
 1. Download Latest Release
 2. Make a python virtualenv
