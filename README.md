@@ -40,3 +40,8 @@ Once you have the website running, signup a new user named `admin`, and click on
 	4. Lots of Statistics 
 4. Simple 
 5. Protection against SQLi, Cross-Site Request Forgery and Cross-Site scripting 
+
+## More Images!!
+
+![Imgur](https://i.imgur.com/JJMAUHg.png) 
+![Imgur](https://i.imgur.com/VdzWnQy.png)
