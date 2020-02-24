@@ -9,7 +9,7 @@
 # blueprints/users/routes.py: 2
 Flask == 1.0.2
 
-bleach == 3.1.0
+bleach == 3.1.1
 
 # app.py: 2
 # blueprints/__init__.py: 3
