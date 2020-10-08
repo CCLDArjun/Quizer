@@ -1,4 +1,4 @@
-#!/Users/arjunbemarkar/Quizer/env/bin/python3.7
+#!/Users/arjunbemarkar/PythonCreations/Quizer/env/bin/python
 # -*- coding: utf-8 -*-
 # This file is part of pygal
 #
