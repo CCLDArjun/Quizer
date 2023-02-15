@@ -41,7 +41,7 @@ WTForms >= 2.3.3
 # blueprints/challenges/routes.py: 7
 # blueprints/main/routes.py: 7
 # blueprints/users/routes.py: 7
-Werkzeug==0.16.0
+Werkzeug==2.2.3
 
 # blueprints/__init__.py: 11
 # blueprints/users/routes.py: 15
